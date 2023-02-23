@@ -13,7 +13,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Agustín
  */
 public class MazoDeCartas {
-    
     Cartas mazo[];
     int tope;
 
@@ -33,11 +32,7 @@ public class MazoDeCartas {
     public boolean estaLleno(){
         return obtenerTope() == 51;
     }
-    
-    public void establecerTope(int top){
-        this.tope=top;
-    }
-    
+ 
     public void apilar(Cartas car){
         if(!this.estaLleno()){
             this.tope++;

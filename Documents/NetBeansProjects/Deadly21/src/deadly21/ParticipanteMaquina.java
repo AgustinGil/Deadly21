@@ -9,14 +9,19 @@ package deadly21;
  *
  * @author Agustín
  */
-public class ParticipantesMaquina extends Participantes {
+public class ParticipanteMaquina extends Participante {
     
     String actitud;
     
-    public ParticipantesMaquina() {
+    public ParticipanteMaquina() {
         super();
         this.actitud="";
     }
+    
+    public void establecerActitud(String act){
+        this.actitud = act;
+    }
+    
     
     public void decidirMaquina(){
         switch (this.actitud){

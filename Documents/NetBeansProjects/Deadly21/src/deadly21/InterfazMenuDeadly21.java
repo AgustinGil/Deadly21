@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,16 +20,45 @@ import java.util.logging.Logger;
  *
  * @author Agustín
  */
-public class InterfazDeadly21 extends javax.swing.JFrame {
+public class InterfazMenuDeadly21 extends javax.swing.JFrame {
 
     /**
      * Creates new form interfazDeadly21
      */
     
+    static File fichero = new File("archivos");
+    static String barra = File.separator;
+    static String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
+    
     static MazoDeCartas mazo= new MazoDeCartas();
+    static ListaParticipantes lista = new ListaParticipantes();
+    static Scanner scan = new Scanner(System.in);
     
+    private static void cargarParticipantes(){
+        int numParticipantes=0;
+        
+        try {
+            BufferedReader lector = new BufferedReader(new FileReader(ubicacion + "jugadores.in.txt"));
+            
+            while (numParticipantes<7){
+                lista.ingresarAlPrincipio(lector.readLine(),lector.readLine());
+                System.out.println(lector.readLine());
+                
+                numParticipantes++;
+            }            
+            
+            lector.close();
+            
+            System.out.println("Ingrese su nombre");
+            lista.ingresarAlPrincipio(scan.nextLine(), null);
+            
+            
+        } catch (IOException e) { 
+           
+        }
+    }
     
-    public InterfazDeadly21() {
+    public InterfazMenuDeadly21() {
         initComponents();
     }
     
@@ -72,7 +102,7 @@ public class InterfazDeadly21 extends javax.swing.JFrame {
                     .addGroup(fondoColorLayout.createSequentialGroup()
                         .addGap(379, 379, 379)
                         .addComponent(jButton1)))
-                .addContainerGap(355, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         fondoColorLayout.setVerticalGroup(
             fondoColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,7 +111,7 @@ public class InterfazDeadly21 extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(184, 184, 184)
                 .addComponent(jButton1)
-                .addContainerGap(320, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -100,7 +130,7 @@ public class InterfazDeadly21 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        setVisible(false);
+        jButton1.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -120,24 +150,24 @@ public class InterfazDeadly21 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new InterfazDeadly21().setVisible(true);
+            new InterfazMenuDeadly21().setVisible(true);
         });
         
-        File fichero = new File("archivos");
-        String barra = File.separator;
-        String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
+        
+        
+        cargarParticipantes();
         
         if(fichero.mkdir()){
             System.out.println("Se creo");
@@ -148,21 +178,19 @@ public class InterfazDeadly21 extends javax.swing.JFrame {
             escritor.write("jugador");
             escritor.close();
         } catch (IOException ex) {
-            Logger.getLogger(InterfazDeadly21.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        try {
-            BufferedReader lector = new BufferedReader(new FileReader(ubicacion + "jugadores.in.txt"));
-            System.out.println(lector.readLine());
-            System.out.println(lector.readLine());
-            lector.close();
-        } catch (IOException e) { 
-           
-        }
+        
 
         mazo.generarMazo();
         mazo.barajearMazo();
         
+        lista.emparejar();
+        
+        for (int i=0; i<lista.largo;i++){
+                System.out.println("\n " + "[" + i +"] " + lista.obtenerNombreParticipante(i) + " C, " + lista.obtenerParejaParticipante(i));
+            }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
