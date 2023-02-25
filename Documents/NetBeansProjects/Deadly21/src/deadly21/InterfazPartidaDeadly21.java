@@ -5,34 +5,148 @@
  */
 package deadly21;
 
-import static deadly21.InterfazMenuDeadly21.lista;
-import static deadly21.InterfazMenuDeadly21.mazo;
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JDialog;
+import static deadly21.InterfazMenuDeadly21.ubicacion;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Agustín
  */
 public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
+    static MazoDeCartas mazo= new MazoDeCartas();
+    static ListaParticipantes lista = new ListaParticipantes();
+    static ListaParticipantes listaInicial = new ListaParticipantes();
+    static ListaParticipantes listaSemis = new ListaParticipantes();
+    static ListaParticipantes listaFinal = new ListaParticipantes();
+    static Scanner scan = new Scanner(System.in);
+    static int turno;
+    static Cartas baraja1 = new Cartas();
+    static Cartas baraja2 = new Cartas();
+    static Cartas barajaR2 = new Cartas();
+    static Cartas barajaR1 = new Cartas();
     
+    
+    public static void cargarParticipantes(){
+        int numParticipantes=0;
+        
+        try {
+            BufferedReader lector = new BufferedReader(new FileReader(ubicacion + "jugadores.in.txt"));
+            
+            while (numParticipantes<7){
+                lista.ingresarAlPrincipio(lector.readLine(),lector.readLine());
+                System.out.println(lector.readLine());
+                
+                numParticipantes++;
+            }            
+            
+            lector.close();
+            
+            System.out.println("Ingrese su nombre");
+            lista.ingresarAlPrincipio(scan.nextLine(), null);
+            
+            
+        } catch (IOException e) { 
+           
+        }
+    }
+   
+        
+    
+    public void Partida(int i){
+        Participante Jugador = lista.obtenerParticipante(i);
+        Participante Rival = lista.obtenerParejaParticipante(i);
+        boolean finalRonda=false;
+           
+        while(Jugador.rondasGanadas<1 || Rival.rondasGanadas<1){
+           turno = ThreadLocalRandom.current().nextInt(1,3);
+        
+             baraja1 = Jugador.pedirCarta();
+            baraja2 = Jugador.pedirCarta();
+            Jugador.imprimirMano();
+            barajaR1 =Rival.pedirCarta();
+            barajaR2 =Rival.pedirCarta();
+            Rival.imprimirMano();
+            while(finalRonda==false){
+                if (turno==1 && Rival.decision!=1){
+                    turno=2;
+                }else if (turno==2 && Jugador.decision!=1){
+                    turno=1;
+                }
 
+                if (turno==1){
+                    if (Jugador.esBlackjack()==false){
+                       System.out.println("1.Quedarte 2.Pedir");
+                        Jugador.decision = scan.nextInt();
+                        Jugador.decidir(); 
+                    } 
+                    if (Jugador.esBlackjack()==true || Jugador.sePaso()==true){
+                        finalRonda=true;
+                    }
+                }else{
+                    Rival.decision = Rival.decidirMaquina();
+                    Rival.decidir();
+                    if (Rival.esBlackjack()==true || Rival.sePaso()==true){
+                        finalRonda=true;
+                    }
+                }
+                if (Jugador.decision==1 && Rival.decision==1){
+                    finalRonda=true;
+                }
+            }
+                
+            finalRonda=false;
+            
+            if (Jugador.sumMano()==Rival.sumMano()){
+                Jugador.rondasGanadas++;
+                Rival.rondasGanadas++;
+                System.out.println("Empate");
+            }else if (Jugador.sumMano()>Rival.sumMano() && !Jugador.sePaso() || Rival.sePaso() && !Jugador.sePaso()){
+                Jugador.rondasGanadas++;
+                System.out.println("Gano Jugador");
+            }else if (Jugador.sumMano()<Rival.sumMano() && !Rival.sePaso() || Jugador.sePaso() && !Rival.sePaso()){
+                Rival.rondasGanadas++;
+                System.out.println("Gano Rival");
+            }
+            
+            Jugador.reiniciarValores();
+            Rival.reiniciarValores();
+        }
+     
+        
+        
+        
+    }
+    
+    
+    public static void igualar(int indice, ListaParticipantes lis){
+        for(int i = 0; i<indice; i++){
+            lis.ingresarAlFinal(lista.competidor(i+1).nombre, lista.competidor(i+1).actitud);
+        }
+    }
     /**
      * Creates new form InterfazPartidaDeadly21
      */
     public InterfazPartidaDeadly21() {
         initComponents();
-        Oponente.setText(lista.parejaJugador().obtenerNombre());
-        lb_Jugador.setText(lista.obtenerNombreParticipante(0));
-        
-        
-        
+        setLocationRelativeTo(null);
+        try{
+        cartaJugador1.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1.imagen)));
+        cartaJugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja2.imagen)));
+        cartaRival1.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1.imagen)));
+        cartaRival2.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR2.imagen)));
+        }
+        catch(Exception e){
+        }
         
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,149 +158,101 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     private void initComponents() {
 
         fondoColor = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        Carta2 = new javax.swing.JLabel();
-        Carta3 = new javax.swing.JLabel();
-        Carta4 = new javax.swing.JLabel();
-        Carta5 = new javax.swing.JLabel();
-        Carta1 = new javax.swing.JLabel();
-        Carta6 = new javax.swing.JLabel();
-        Carta7 = new javax.swing.JLabel();
-        Carta8 = new javax.swing.JLabel();
-        Carta9 = new javax.swing.JLabel();
-        Carta10 = new javax.swing.JLabel();
-        Jugador = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        Oponente = new javax.swing.JLabel();
-        lb_Jugador = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        uiRival = new javax.swing.JLabel();
+        uiJugador = new javax.swing.JLabel();
+        botPlantar = new javax.swing.JButton();
+        botPedir = new javax.swing.JButton();
+        cartasMesa = new javax.swing.JLabel();
+        cartaJugador5 = new javax.swing.JLabel();
+        cartaJugador4 = new javax.swing.JLabel();
+        cartaJugador3 = new javax.swing.JLabel();
+        cartaJugador2 = new javax.swing.JLabel();
+        cartaJugador1 = new javax.swing.JLabel();
+        cartaRival1 = new javax.swing.JLabel();
+        cartaRival2 = new javax.swing.JLabel();
+        cartaRival3 = new javax.swing.JLabel();
+        cartaRival4 = new javax.swing.JLabel();
+        cartaRival5 = new javax.swing.JLabel();
+        fondoMesa = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         fondoColor.setBackground(new java.awt.Color(153, 153, 153));
         fondoColor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Quedarse");
-        fondoColor.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 340, 258, 91));
+        uiRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/MarcoPerfil.png"))); // NOI18N
+        fondoColor.add(uiRival, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 360, 180));
 
-        jButton2.setText("Pedir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        uiJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/MarcoPerfil.png"))); // NOI18N
+        fondoColor.add(uiJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, 360, 180));
+
+        botPlantar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BotonPlantarse.png"))); // NOI18N
+        botPlantar.setText("  ");
+        botPlantar.setBorder(null);
+        botPlantar.setBorderPainted(false);
+        botPlantar.setContentAreaFilled(false);
+        botPlantar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botPlantarActionPerformed(evt);
             }
         });
-        fondoColor.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 258, 91));
+        fondoColor.add(botPlantar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 460, 258, 240));
 
-        Carta2.setBackground(new java.awt.Color(102, 0, 102));
-        Carta2.setForeground(new java.awt.Color(153, 102, 255));
-        Carta2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 600, 100, 150));
-
-        Carta3.setBackground(new java.awt.Color(102, 0, 102));
-        Carta3.setForeground(new java.awt.Color(153, 102, 255));
-        Carta3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 600, 100, 150));
-
-        Carta4.setBackground(new java.awt.Color(102, 0, 102));
-        Carta4.setForeground(new java.awt.Color(153, 102, 255));
-        Carta4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 600, 100, 150));
-
-        Carta5.setBackground(new java.awt.Color(102, 0, 102));
-        Carta5.setForeground(new java.awt.Color(153, 102, 255));
-        Carta5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta5, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 600, 100, 150));
-
-        Carta1.setBackground(new java.awt.Color(102, 0, 102));
-        Carta1.setForeground(new java.awt.Color(153, 102, 255));
-        Carta1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 600, 100, 150));
-
-        Carta6.setBackground(new java.awt.Color(102, 0, 102));
-        Carta6.setForeground(new java.awt.Color(153, 102, 255));
-        Carta6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 100, 150));
-
-        Carta7.setBackground(new java.awt.Color(102, 0, 102));
-        Carta7.setForeground(new java.awt.Color(153, 102, 255));
-        Carta7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 0, 100, 150));
-
-        Carta8.setBackground(new java.awt.Color(102, 0, 102));
-        Carta8.setForeground(new java.awt.Color(153, 102, 255));
-        Carta8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta8, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 100, 150));
-
-        Carta9.setBackground(new java.awt.Color(102, 0, 102));
-        Carta9.setForeground(new java.awt.Color(153, 102, 255));
-        Carta9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta9, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 100, 150));
-
-        Carta10.setBackground(new java.awt.Color(102, 0, 102));
-        Carta10.setForeground(new java.awt.Color(153, 102, 255));
-        Carta10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/deadly21/Carta.png"))); // NOI18N
-        fondoColor.add(Carta10, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 100, 150));
-        fondoColor.add(Jugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 630, 190, 120));
-        fondoColor.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 0, 190, 120));
-        fondoColor.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, -1, -1));
-
-        Oponente.setText("Nombre");
-        fondoColor.add(Oponente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 90, -1));
-
-        lb_Jugador.setText("Nombre");
-        fondoColor.add(lb_Jugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 680, -1, -1));
-
-        jButton3.setText("tablas");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        botPedir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BotonPedir.png"))); // NOI18N
+        botPedir.setText("  ");
+        botPedir.setBorder(null);
+        botPedir.setBorderPainted(false);
+        botPedir.setContentAreaFilled(false);
+        botPedir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                botPedirActionPerformed(evt);
             }
         });
-        fondoColor.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
+        fondoColor.add(botPedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 460, 258, 240));
+
+        cartasMesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Cartas/back_black_basic_white.png"))); // NOI18N
+        fondoColor.add(cartasMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 120, 170));
+        fondoColor.add(cartaJugador5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 580, 120, 170));
+        fondoColor.add(cartaJugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 580, 120, 170));
+        fondoColor.add(cartaJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 580, 120, 170));
+        fondoColor.add(cartaJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 580, 120, 170));
+
+        cartaJugador1.setBackground(new java.awt.Color(255, 255, 255));
+        cartaJugador1.setForeground(new java.awt.Color(255, 255, 255));
+        fondoColor.add(cartaJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 580, 120, 170));
+        fondoColor.add(cartaRival1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 120, 170));
+        fondoColor.add(cartaRival2, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 10, 120, 170));
+        fondoColor.add(cartaRival3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 120, 170));
+        fondoColor.add(cartaRival4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 120, 170));
+        fondoColor.add(cartaRival5, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 120, 170));
+
+        fondoMesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/FondoMesa.png"))); // NOI18N
+        fondoMesa.setToolTipText("");
+        fondoColor.add(fondoMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 800));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fondoColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(fondoColor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fondoColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(fondoColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void botPlantarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botPlantarActionPerformed
         // TODO add your handling code here:
-        /*JDialog dialogo = new JDialog();
-        JPanel panel = new JPanel();
-        JLabel etiqueta = new JLabel("Error, debe ingresar su nombre y apellido");
-        JLabel etiqueta1 = new JLabel("Error, debe una cedula valida");
-        JButton boton = new JButton("Cerrar");
-        boton.addActionListener((ActionEvent e) -> {
-            dialogo.dispose();
-        });
-        panel.add(etiqueta);
-        panel.add(boton);
-        dialogo.add(panel, BorderLayout.CENTER);
-        dialogo.setSize(300, 100);
+         
         
-           
-            dialogo.setVisible(true);*/
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_botPlantarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void botPedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botPedirActionPerformed
         // TODO add your handling code here:
-        new Duelos().setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_botPedirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,24 +260,26 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Carta1;
-    private javax.swing.JLabel Carta10;
-    private javax.swing.JLabel Carta2;
-    private javax.swing.JLabel Carta3;
-    private javax.swing.JLabel Carta4;
-    private javax.swing.JLabel Carta5;
-    private javax.swing.JLabel Carta6;
-    private javax.swing.JLabel Carta7;
-    private javax.swing.JLabel Carta8;
-    private javax.swing.JLabel Carta9;
-    private javax.swing.JLabel Jugador;
-    private javax.swing.JLabel Oponente;
+    private javax.swing.JButton botPedir;
+    private javax.swing.JButton botPlantar;
+    private javax.swing.JLabel cartaJugador1;
+    private javax.swing.JLabel cartaJugador2;
+    private javax.swing.JLabel cartaJugador3;
+    private javax.swing.JLabel cartaJugador4;
+    private javax.swing.JLabel cartaJugador5;
+    private javax.swing.JLabel cartaRival1;
+    private javax.swing.JLabel cartaRival2;
+    private javax.swing.JLabel cartaRival3;
+    private javax.swing.JLabel cartaRival4;
+    private javax.swing.JLabel cartaRival5;
+    private javax.swing.JLabel cartasMesa;
     private javax.swing.JPanel fondoColor;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel lb_Jugador;
+    private javax.swing.JLabel fondoMesa;
+    private javax.swing.JLabel uiJugador;
+    private javax.swing.JLabel uiRival;
     // End of variables declaration//GEN-END:variables
+
+    private void establecerCarta(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

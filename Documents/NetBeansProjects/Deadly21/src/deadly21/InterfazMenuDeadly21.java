@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,48 +31,11 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     static String barra = File.separator;
     static String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
     
-    static MazoDeCartas mazo= new MazoDeCartas();
-    static ListaParticipantes lista = new ListaParticipantes();
-    static ListaParticipantes listaInicial = new ListaParticipantes();
-    static ListaParticipantes listaSemis = new ListaParticipantes();
-    static ListaParticipantes listaFinal = new ListaParticipantes();
-    static Scanner scan = new Scanner(System.in);
     
-    private static void cargarParticipantes(){
-        int numParticipantes=0;
-        
-        try {
-            BufferedReader lector = new BufferedReader(new FileReader(ubicacion + "jugadores.in.txt"));
-            
-            while (numParticipantes<7){
-                lista.ingresarAlPrincipio(lector.readLine(),lector.readLine());
-                System.out.println(lector.readLine());
-                
-                numParticipantes++;
-            }            
-            
-            lector.close();
-            
-            System.out.println("Ingrese su nombre");
-            lista.ingresarAlPrincipio(scan.nextLine(), null);
-            
-          
-            
-            
-            
-        } catch (IOException e) { 
-           
-        }
-    }
-    
-    public static void igualar(int indice, ListaParticipantes lis){
-        for(int i = 0; i<indice; i++){
-            lis.ingresarAlFinal(lista.competidor(i+1).nombre, lista.competidor(i+1).actitud);
-        }
-    }
     
     public InterfazMenuDeadly21() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     /**
@@ -84,47 +48,62 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     private void initComponents() {
 
         fondoColor = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        Btn_Iniciar = new javax.swing.JButton();
+        TituloMenu = new javax.swing.JLabel();
+        botComoJugar = new javax.swing.JButton();
+        botNuevaPartida = new javax.swing.JButton();
+        fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        fondoColor.setBackground(new java.awt.Color(255, 255, 255));
+        fondoColor.setBackground(new java.awt.Color(102, 102, 102));
+        fondoColor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Deadly 21");
+        TituloMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Titulo.png"))); // NOI18N
+        fondoColor.add(TituloMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, -1));
 
-        Btn_Iniciar.setText("Empezar Partida");
-        Btn_Iniciar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_IniciarActionPerformed(evt);
+        botComoJugar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/ComoJugar.png"))); // NOI18N
+        botComoJugar.setBorder(null);
+        botComoJugar.setBorderPainted(false);
+        botComoJugar.setContentAreaFilled(false);
+        botComoJugar.setFocusPainted(false);
+        botComoJugar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                botComoJugarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                botComoJugarMouseExited(evt);
             }
         });
+        botComoJugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botComoJugarActionPerformed(evt);
+            }
+        });
+        fondoColor.add(botComoJugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, -1, -1));
 
-        javax.swing.GroupLayout fondoColorLayout = new javax.swing.GroupLayout(fondoColor);
-        fondoColor.setLayout(fondoColorLayout);
-        fondoColorLayout.setHorizontalGroup(
-            fondoColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(fondoColorLayout.createSequentialGroup()
-                .addGroup(fondoColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(fondoColorLayout.createSequentialGroup()
-                        .addGap(327, 327, 327)
-                        .addComponent(jLabel1))
-                    .addGroup(fondoColorLayout.createSequentialGroup()
-                        .addGap(379, 379, 379)
-                        .addComponent(Btn_Iniciar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        fondoColorLayout.setVerticalGroup(
-            fondoColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(fondoColorLayout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(jLabel1)
-                .addGap(184, 184, 184)
-                .addComponent(Btn_Iniciar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        botNuevaPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/NuevaPartida.png"))); // NOI18N
+        botNuevaPartida.setBorder(null);
+        botNuevaPartida.setBorderPainted(false);
+        botNuevaPartida.setContentAreaFilled(false);
+        botNuevaPartida.setFocusPainted(false);
+        botNuevaPartida.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                botNuevaPartidaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                botNuevaPartidaMouseExited(evt);
+            }
+        });
+        botNuevaPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botNuevaPartidaActionPerformed(evt);
+            }
+        });
+        fondoColor.add(botNuevaPartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, -1, -1));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Fondo.png"))); // NOI18N
+        fondo.setToolTipText("");
+        fondoColor.add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 800));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,11 +119,38 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Btn_IniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_IniciarActionPerformed
+    private void botNuevaPartidaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botNuevaPartidaMouseEntered
         // TODO add your handling code here:
-        Btn_Iniciar.setVisible(false);
-        new InterfazPartidaDeadly21().setVisible(true);
-    }//GEN-LAST:event_Btn_IniciarActionPerformed
+        botNuevaPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/NuevaPartida2.png")));
+    }//GEN-LAST:event_botNuevaPartidaMouseEntered
+
+    private void botNuevaPartidaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botNuevaPartidaMouseExited
+        // TODO add your handling code here:
+        botNuevaPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/NuevaPartida.png")));
+    }//GEN-LAST:event_botNuevaPartidaMouseExited
+
+    private void botComoJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botComoJugarActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_botComoJugarActionPerformed
+
+    private void botComoJugarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botComoJugarMouseEntered
+        // TODO add your handling code here:
+        botComoJugar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/ComoJugar2.png")));
+    }//GEN-LAST:event_botComoJugarMouseEntered
+
+    private void botComoJugarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botComoJugarMouseExited
+        // TODO add your handling code here:
+        botComoJugar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/ComoJugar.png")));
+    }//GEN-LAST:event_botComoJugarMouseExited
+
+    private void botNuevaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botNuevaPartidaActionPerformed
+        // TODO add your handling code here:
+        InterfazPartidaDeadly21 interfazPartida = new InterfazPartidaDeadly21();
+        interfazPartida.setVisible(true);
+        setVisible(false);
+        
+    }//GEN-LAST:event_botNuevaPartidaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,12 +186,28 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
         
         
         
-        cargarParticipantes();
+        InterfazPartidaDeadly21.cargarParticipantes();
+        
+        
+        
+        
+
+        InterfazPartidaDeadly21.mazo.generarMazo();
+        InterfazPartidaDeadly21.mazo.barajearMazo();
+        
+        InterfazPartidaDeadly21.lista.emparejar();
+        
+        for (int i=0; i<InterfazPartidaDeadly21.lista.largo;i++){
+                System.out.println("\n " + "[" + i +"] " + InterfazPartidaDeadly21.lista.obtenerNombreParticipante(i) + " C, " + InterfazPartidaDeadly21.lista.obtenerParticipante(i).obtenerActitud() + InterfazPartidaDeadly21.lista.obtenerParejaParticipante(i).obtenerNombre());
+            }
+        
+        InterfazPartidaDeadly21 partida = new InterfazPartidaDeadly21();
+        partida.Partida(0);
+        
         
         if(fichero.mkdir()){
             System.out.println("Se creo");
         }
-        
         try {
             BufferedWriter escritor = new BufferedWriter(new FileWriter(ubicacion + "ganadores.out.txt"));
             escritor.write("jugador");
@@ -193,69 +215,13 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-
-        
-        igualar(8,listaInicial);
-        lista.emparejar();
-        lista.imprimirLista();
-        lista.duelos();
-        
-        new Duelos().setVisible(true);
-        
-        /*
-        Participante ko = lista.ko(0);
-        listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-        System.out.println(listaEliminados.competidor(0).nombre);
-        
-        ko = lista.ko(1);
-        listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-        System.out.println(listaEliminados.competidor(0).nombre);
-        
-        ko = lista.ko(2);
-        listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-        System.out.println(listaEliminados.competidor(0).nombre);
-        
-        ko = lista.ko(3);
-        listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-        System.out.println(listaEliminados.competidor(0).nombre);
-        */
-        lista.ko(0);
-         lista.ko(1);
-         lista.ko(2);
-         lista.ko(3);
-         igualar(4,listaSemis);
-         lista.emparejar();
-         lista.duelos();
-         new Duelos().setVisible(true);
-         /*
-         ko = lista.ko(0);
-         listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-         
-         ko = lista.ko(1);
-         listaEliminados.ingresarAlFinal(ko.nombre, ko.actitud);
-         */
-         lista.ko(0);
-         lista.ko(1);
-         igualar(2,listaFinal);
-         lista.emparejar();
-         lista.duelos();
-         new Duelos().setVisible(true);
-         
-         lista.ko(0);
-         new Duelos().setVisible(true);
-         
-         
-        
-        for (int i=0; i<lista.largo;i++){
-                System.out.println("\n " + "[" + i +"] " + lista.obtenerNombreParticipante(i) + " C, " + lista.obtenerParejaParticipante(i));
-            }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Btn_Iniciar;
+    private javax.swing.JLabel TituloMenu;
+    private javax.swing.JButton botComoJugar;
+    private javax.swing.JButton botNuevaPartida;
+    private javax.swing.JLabel fondo;
     private javax.swing.JPanel fondoColor;
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

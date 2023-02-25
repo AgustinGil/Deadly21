@@ -5,26 +5,26 @@
  */
 package deadly21;
 
-import static deadly21.InterfazMenuDeadly21.mazo;
-import java.util.Random;
+import static deadly21.InterfazPartidaDeadly21.mazo;
+
 /**
  *
  * @author Agustín
  */
 public class Participante {
     
-    String nombre;
+    String nombre, actitud;
     Cartas[] mano = new Cartas[5];
-    int decision;
-    String actitud;
+    int decision,rondasGanadas,tope;
     Participante sigParticipantes,pareja;
     
     public Participante(){
         this.nombre="";
         this.decision=0;
+        this.tope=-1;
         this.sigParticipantes=null;
         this.pareja=null;
-        this.actitud = null;
+        this.rondasGanadas=0;
     }
     
     public void establecerNombre(String nom){
@@ -59,13 +59,15 @@ public class Participante {
         return this.sumMano()>21;
     }
 
-    public void pedirCarta(){
-        this.mano[mazo.tope]= mazo.desapilar();
+    public Cartas pedirCarta(){
+        this.tope++;
+        this.mano[this.tope]= mazo.desapilar();
+        return mano[tope];
     }
     
     public int sumMano(){
         int sum=0;
-        for(int i=0; i<=4;i++){
+        for(int i=0; i<this.tope+1;i++){
             if (this.mano[i].obtenerValor()>10){
                 sum=sum+10;
             }else if (this.mano[i].obtenerValor()==1){
@@ -76,7 +78,7 @@ public class Participante {
         }
         
         if (sum>21){
-            for(int i=0; i<=4;i++){
+            for(int i=0; i<this.tope+1;i++){
                 if (this.mano[i].obtenerValor()==1){ 
                    sum=sum-10;
                 }
@@ -88,38 +90,61 @@ public class Participante {
         return sum;
     }
     
-    public void decision(){
-        switch(decision){
-            case 1:
-                break;
-            
-            case 2:
-                pedirCarta();
-                break;
+    public void decidir(){
+        if(decision == 2){
+            this.pedirCarta();
         }
     }
+    
     public void establecerActitud(String act){
         this.actitud = act;
     }
     
+    public String obtenerActitud(){
+        return this.actitud;
+    }
     
-    public void decidirMaquina(){
+    
+    public int decidirMaquina(){
         switch (this.actitud){
             case "Reservado":
                 if (this.sumMano()<15){
-                    decision=1;
+                    this.decision=2;
                 }else{
-                    decision=2;
+                    this.decision=1;
                 }
                 break;
             case "Arriesgado":
                 if (this.sumMano()<18){
-                    decision=1;
+                    this.decision=2;
                 }else{
-                    decision=2;
+                    this.decision=1;
                 }
                 break;
         }
+        return this.decision;
+    }
+    
+    public void imprimirMano(){
+        for (int i=0; i<=tope;i++) {
+            System.out.println("Pinta: " + this.mano[i].obtenerPalo() + "  Valor: " +  this.mano[i].obtenerValor());
+        }
+    }
+    
+     public int cantidadDeCartas(){
+         int i = 0;
+        while(i<= tope){
+            i++;
+        }
+        return i;
+    }
+    
+    public void reiniciarValores(){
+        this.decision=0;
+        this.tope=-1;
         
+        for (int i=0; i<5;i++){
+            this.mano[i]=null;
+        }
     }
 }

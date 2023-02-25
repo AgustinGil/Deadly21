@@ -13,11 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Agustín
  */
 public class MazoDeCartas {
-    Cartas mazo[];
+    Cartas mazo[] = new Cartas[52];;
     int tope;
 
-    public MazoDeCartas() {
-        this.mazo = new Cartas[52];
+    public MazoDeCartas() { 
         tope=-1;
     }
     
@@ -53,34 +52,50 @@ public class MazoDeCartas {
     }   
     
     public void generarMazo(){
-        String palo=" ";
+        String valor = "";
+        String palo = "";
         
         for (int i=0; i<=3; i++){
-            for (int j=1; j<14; j++){
-                switch (i){
+            switch (i){
                     case 0:
-                        palo="Corazon";
+                        palo="hearts";
                         break;
                     case 1:
-                        palo="Diamante";
+                        palo= "diamonds";
                         break;
                     case 2:
-                        palo="Trebol";
+                        palo="clubs";
                         break;
                     case 3:
-                        palo="Pica";
+                        palo="spades";
                         break;   
                 }
-                
-                Cartas nueva = new Cartas();
+            for (int j=1; j<14; j++){
+                    switch(j){
+               case 1:
+                   valor="ace";
+                   break;
+               case 11:
+                   valor="jack";
+                   break;
+               case 12:
+                   valor="queen";
+                   break;
+               case 13:
+                   valor="king";
+                   break;
+           }
+           String imagen ="/imagen/Cartas/"+valor+"_"+palo+"_white.png";
+           Cartas nueva = new Cartas();
                 
                 nueva.establecerPalo(palo);
                 nueva.establecerValor(j);
-                
+                nueva.establecerImagen(imagen);
                 apilar(nueva);
+                
+        }
             }
         }
-    }
     
     public void barajearMazo(){
         Random rnd = ThreadLocalRandom.current();
@@ -101,4 +116,8 @@ public class MazoDeCartas {
             System.out.println("Pinta: " + this.mazo[i].obtenerPalo() + "  Valor: " +  this.mazo[i].obtenerValor());
         }
     }
+    
+    
+   
+    
 }
