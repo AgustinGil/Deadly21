@@ -5,6 +5,8 @@
  */
 package deadly21;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  *
  * @author Agustín
@@ -30,64 +32,50 @@ public class ListaParticipantes {
 
     //Ingresa un valor al inicio de la lista
     public void ingresarAlPrincipio (String nombre, String actitud){
-        if (actitud!=null){
-            ParticipanteMaquina nuevo = new ParticipanteMaquina();
-            nuevo.establecerNombre(nombre);  
-            nuevo.establecerActitud(actitud);
-            
-            if (estaVacia()){
-                primero = nuevo;
-            }else{
-                nuevo.establecerSiguiente(primero);
-                primero=nuevo;
-            }
+        Participante nuevo = new Participante();  
+        nuevo.establecerNombre(nombre);   
+        nuevo.establecerActitud(actitud);
+
+        if (estaVacia()){
+            primero = nuevo;
         }else{
-            Participante nuevo = new Participante();  
-            nuevo.establecerNombre(nombre);   
-            
-            if (estaVacia()){
-                primero = nuevo;
-            }else{
-                nuevo.establecerSiguiente(primero);
-                primero=nuevo;
-            }
+            nuevo.establecerSiguiente(primero);
+            primero=nuevo;
         }
+        
         largo++;
     }
     
     //Ingresa un valor al final de la lista
+    
     public void ingresarAlFinal (String nombre, String actitud){
         Participante aux = primero;
         
-        if (actitud!=null){
-            ParticipanteMaquina nuevo = new ParticipanteMaquina();
-            nuevo.establecerNombre(nombre);  
-            nuevo.establecerActitud(actitud);
-            
-            if (estaVacia()){
-                primero = nuevo;
-            }else{
-                while (aux.obtenerSiguiente()!=null){
-                    aux = aux.obtenerSiguiente();
-                }
-                aux.establecerSiguiente(nuevo);
-            }
+        Participante nuevo = new Participante();  
+        nuevo.establecerNombre(nombre);   
+        nuevo.establecerActitud(actitud);
+
+        if (estaVacia()){
+            primero = nuevo;
         }else{
-            Participante nuevo = new Participante();  
-            nuevo.establecerNombre(nombre);   
-            
-            if (estaVacia()){
-                primero = nuevo;
-            }else{
-                while (aux.obtenerSiguiente()!=null){
-                    aux = aux.obtenerSiguiente();
-                }
-                aux.establecerSiguiente(nuevo);
+            while (aux.obtenerSiguiente()!=null){
+                aux = aux.obtenerSiguiente();
             }
+            aux.establecerSiguiente(nuevo);
         }
+        
         largo++;
     }
     
+    
+    public Participante obtenerParticipante(int indice){
+        Participante aux = primero;
+        
+        for (int i=0; i<indice;i++){
+            aux = aux.obtenerSiguiente();
+        }
+        return aux;
+    }
     //Metodo que devuelve el numero que almacena un nodo dado su indice
     public String obtenerNombreParticipante(int indice){
         Participante aux = primero;
@@ -98,45 +86,36 @@ public class ListaParticipantes {
         return aux.obtenerNombre();
     }
     
-    public String obtenerParejaParticipante(int indice){
+    public Participante obtenerParejaParticipante(int indice){
         Participante aux = primero;
         
         for (int i=0; i<indice;i++){
             aux = aux.obtenerSiguiente();
         }
-        return String.valueOf(aux.obtenerPareja());
+        return aux.obtenerPareja();
     }
     
 
     //Metodo que permite insertar un nodo dado un indice
     public void insertarEnIndice(int indice,String nom, String act){
-        
-        
         if (indice == 0 ) {
             ingresarAlPrincipio(nom,act);
         }else if (indice==largo){
             ingresarAlFinal(nom,act);
         }else{
             Participante aux = primero;
+            
             for (int i=0; i< indice-1;i++){
                 aux = aux.obtenerSiguiente();
             }
             
             Participante sigCreado = aux.obtenerSiguiente();
-            if(act!=null){
-                ParticipanteMaquina nuevo = new ParticipanteMaquina();
-                nuevo.establecerNombre(nom);
-                nuevo.establecerActitud(act);
-                
-                aux.establecerSiguiente(nuevo);
-                nuevo.establecerSiguiente(sigCreado);
-            }else{
-                Participante nuevo = new Participante();
-                nuevo.establecerNombre(nom);
-                aux.establecerSiguiente(nuevo);
-                nuevo.establecerSiguiente(sigCreado);
+            Participante nuevo = new Participante();
+            nuevo.establecerNombre(nom);
+            nuevo.establecerActitud(act);
+            aux.establecerSiguiente(nuevo);
+            nuevo.establecerSiguiente(sigCreado);
             }
-        }
         largo++;
     }
     
@@ -157,10 +136,41 @@ public class ListaParticipantes {
         largo--;
     }
     
+    public void partidaSimulada(int i){
+        int eliminacion = ThreadLocalRandom.current().nextInt(1,3);
+        
+        if (eliminacion==1){
+            eliminar(i); 
+        }else{
+            eliminar(i+1);
+        }
+    }
+    
+    
+    public int total(){
+        return largo;
+    }
+    
+    public Participante competidor(int indice){
+         Participante aux = primero;
+         for (int i=0; i< indice-1;i++){
+                aux = aux.obtenerSiguiente();
+            }
+         return aux;
+    }
+    
     public void emparejar(){
         Participante aux = primero;
         Participante aux2 = null;
-        aux.establecerPareja(aux.obtenerSiguiente());
+        while (aux.obtenerSiguiente()!=null){
+            aux2=aux;
+            aux = aux.obtenerSiguiente();
+            aux.establecerPareja(aux2);
+            aux2.establecerPareja(aux);
+            
+            if (aux.obtenerSiguiente()!=null){
+                aux = aux.obtenerSiguiente();
+            }
+        }
     }
-    
 }
