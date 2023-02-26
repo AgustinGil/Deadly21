@@ -26,11 +26,11 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     static ListaParticipantes listaFinal = new ListaParticipantes();
     static Scanner scan = new Scanner(System.in);
     static int turno;
-    static Cartas baraja1 = new Cartas();
-    static Cartas baraja2 = new Cartas();
-    static Cartas barajaR2 = new Cartas();
-    static Cartas barajaR1 = new Cartas();
-    
+    static Cartas []baraja1 = new Cartas[5];
+    static Cartas []barajaR1 = new Cartas[5];
+    static int contador = 0;
+    static Participante Jugador;
+    static  Participante Rival;
     
     public static void cargarParticipantes(){
         int numParticipantes=0;
@@ -59,18 +59,18 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         
     
     public void Partida(int i){
-        Participante Jugador = lista.obtenerParticipante(i);
-        Participante Rival = lista.obtenerParejaParticipante(i);
+        Jugador = lista.obtenerParticipante(i);
+        Rival = lista.obtenerParejaParticipante(i);
         boolean finalRonda=false;
            
         while(Jugador.rondasGanadas<1 || Rival.rondasGanadas<1){
            turno = ThreadLocalRandom.current().nextInt(1,3);
         
-             baraja1 = Jugador.pedirCarta();
-            baraja2 = Jugador.pedirCarta();
+             baraja1[0] = Jugador.pedirCarta();
+            baraja1[1] = Jugador.pedirCarta();
             Jugador.imprimirMano();
-            barajaR1 =Rival.pedirCarta();
-            barajaR2 =Rival.pedirCarta();
+            barajaR1[0] =Rival.pedirCarta();
+            barajaR1[1]=Rival.pedirCarta();
             Rival.imprimirMano();
             while(finalRonda==false){
                 if (turno==1 && Rival.decision!=1){
@@ -136,10 +136,10 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         try{
-        cartaJugador1.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1.imagen)));
-        cartaJugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja2.imagen)));
-        cartaRival1.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1.imagen)));
-        cartaRival2.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR2.imagen)));
+        cartaJugador1.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[0].imagen)));
+        cartaJugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[1].imagen)));
+        cartaRival1.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1[0].imagen)));
+        cartaRival2.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1[1].imagen)));
         }
         catch(Exception e){
         }
@@ -252,6 +252,23 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
 
     private void botPedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botPedirActionPerformed
         // TODO add your handling code here:
+        if(contador == 1){
+            baraja1[2] = Jugador.pedirCarta();
+            cartaJugador3.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[2].imagen)));
+        }
+        else if(contador == 2){
+            baraja1[3] = Jugador.pedirCarta();
+            cartaJugador4.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[3].imagen)));
+        }
+        
+        else if(contador == 3){
+            baraja1[4] = Jugador.pedirCarta();
+            cartaJugador5.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[4].imagen)));
+        }
+        else{
+            //error
+        }
+        contador++;
     }//GEN-LAST:event_botPedirActionPerformed
 
     /**

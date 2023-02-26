@@ -84,7 +84,11 @@ public class MazoDeCartas {
                case 13:
                    valor="king";
                    break;
+               default:
+                   valor = String.valueOf(j);
+                   break;
            }
+           
            String imagen ="/imagen/Cartas/"+valor+"_"+palo+"_white.png";
            Cartas nueva = new Cartas();
                 
