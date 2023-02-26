@@ -133,7 +133,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
                     aux=cartaRival5;
                     break;
             }
-            if(i<=Jugador.tope){
+            if(i<=Rival.tope){
             aux.setIcon(new javax.swing.ImageIcon(getClass().getResource(Rival.mano[i].imagen)));}
             else{
                 aux.setIcon(null);
@@ -157,23 +157,68 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         barridoLuces();
         Rival.decision = Rival.decidirMaquina();
         
-        if(Rival.decision == 2 && decision == 2){
+        
+        if (Jugador.manoCharlie() || Rival.manoCharlie()){
+            finRonda=true;
+        }
+        
+        else if(Rival.sePaso() || Jugador.sePaso()){
+            finRonda=true;
+        }else if(decision==1 || Jugador.esBlackjack()){
+            botPedir.setEnabled(false);
+            botPlantar.setEnabled(false);
+            if(Rival.decision == 2){
+            while(Rival.decidirMaquina()==2 && !Rival.manoCharlie() && !Rival.sePaso() && !Rival.esBlackjack()){
+                Rival.pedirCarta(); 
+            }
+            barridoCartas();
+            }
+            finRonda=true;
+        }
+        else if(Rival.decision == 2 && decision == 2){
             Rival.pedirCarta();
             Jugador.pedirCarta();
             barridoCartas();
+            if(Jugador.sePaso() || Rival.sePaso()){
+                finRonda = true;
+            }
         }
-        if (Jugador.manoCharlie() || Rival.manoCharlie()){
-            finRonda=true;
-        }else if(Rival.sePaso() || Jugador.sePaso()){
-            finRonda=true;
+        else if(Rival.decision == 2 && decision == 1){
+                System.out.println("ciclao");
+            while (Rival.decidirMaquina() !=1 || Rival.manoCharlie()){
+                    System.out.println("ciclo");
+                    Rival.pedirCarta();
+                }
+            barridoCartas();
+            finRonda = true;
         }
-        else if(decision == 1 && Rival.decision == 1){
-             finRonda = true;
-         }
         
+        else if(decision == 2 && Rival.decision ==1){
+            System.out.println("ero");
+            Jugador.pedirCarta();
+            
+            if(Jugador.sePaso()){
+                System.out.println("ero");
+                finRonda = true;
+            }
+        }
+       
+       barridoCartas();
+       System.out.println("ero");
         if(finRonda){
-        
-        if((Jugador.sePaso() || Rival.esBlackjack() || Jugador.sumMano()<Rival.sumMano())){
+            if(Jugador.manoCharlie()){
+                Rondas++;
+                contador = 0;
+                Jugador.rondasGanadas++;
+                System.out.println("gANO Jugador");
+            }
+            else if(Rival.manoCharlie()){
+                 Rondas++;
+                contador = 0;
+                Rival.rondasGanadas++;
+                System.out.println("gANO RIVAL");
+            }
+            else if((Jugador.sePaso() || Rival.esBlackjack() || Jugador.sumMano()<Rival.sumMano())){
             Rondas++;
             contador = 0;
             Rival.rondasGanadas++;
@@ -275,7 +320,8 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             }*/
             Jugador.reiniciarValores();
             Rival.reiniciarValores();
-            
+            botPedir.setEnabled(true);
+            botPlantar.setEnabled(true);
             Jugador.pedirCarta(); 
             Jugador.pedirCarta(); 
             Rival.pedirCarta();
