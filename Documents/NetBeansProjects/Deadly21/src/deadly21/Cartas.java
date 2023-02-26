@@ -13,10 +13,12 @@ public class Cartas {
     
     String palo; 
     int valor;
+    String imagen;
     
     public Cartas() {
         this.palo = "";
         this.valor=0;
+        this.imagen = null;
     }
     
     public String obtenerPalo(){
@@ -35,4 +37,11 @@ public class Cartas {
         this.valor = val;
     }
     
+    public String obtenerImagen(){
+        return imagen;
+    }
+    
+    public void establecerImagen(String img){
+        this.imagen = img;
+    }
 }

@@ -54,6 +54,7 @@ public class MazoDeCartas {
     
     public void generarMazo(){
         String palo=" ";
+        String valor=" ";
         
         for (int i=0; i<=3; i++){
             for (int j=1; j<14; j++){
@@ -72,10 +73,47 @@ public class MazoDeCartas {
                         break;   
                 }
                 
-                Cartas nueva = new Cartas();
+                switch(j){
+                    case 1:
+                        valor="ace";
+                        break;
+                    case 11:
+                        valor="jack";
+                        break;
+                    case 12:
+                        valor="queen";
+                        break;
+                    case 13:
+                        valor="king";
+                        break;
+                    default:
+                        valor = String.valueOf(j);
+                        break;
+                }
                 
+                Cartas nueva = new Cartas();
                 nueva.establecerPalo(palo);
                 nueva.establecerValor(j);
+                
+                switch (i){
+                    case 0:
+                        palo="hearts";
+                        break;
+                    case 1:
+                        palo= "diamonds";
+                        break;
+                    case 2:
+                        palo="clubs";
+                        break;
+                    case 3:
+                        palo="spades";
+                        break;   
+                }
+                
+                String imagen ="/imagen/Cartas/"+valor+"_"+palo+"_white.png";
+                
+                nueva.establecerImagen(imagen);
+                
                 
                 apilar(nueva);
             }

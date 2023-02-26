@@ -59,6 +59,10 @@ public class Participante {
     public boolean sePaso(){
         return this.sumMano()>21;
     }
+    
+    public boolean manoCharlie(){
+        return (this.sumMano()<21 && this.tope==4);
+    }
 
     public void pedirCarta(){
         this.tope++;
@@ -108,6 +112,7 @@ public class Participante {
     public String obtenerActitud(){
         return this.actitud;
     }
+    
     
     
     public int decidirMaquina(){
