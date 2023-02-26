@@ -11,9 +11,8 @@ package deadly21;
  */
 public class Cartas {
     
-    String palo; 
+    String palo, imagen; 
     int valor;
-    String imagen;
     
     public Cartas() {
         this.palo = "";

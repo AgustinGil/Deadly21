@@ -97,7 +97,7 @@ public class MazoDeCartas {
                 nueva.establecerImagen(imagen);
                 apilar(nueva);
                 
-        }
+                }
             }
         }
     
