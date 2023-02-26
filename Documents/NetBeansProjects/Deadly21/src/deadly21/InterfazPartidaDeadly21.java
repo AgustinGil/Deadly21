@@ -6,19 +6,25 @@
 package deadly21;
 
 import static deadly21.InterfazMenuDeadly21.ubicacion;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.swing.ImageIcon;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
+
 
 /**
  *
  * @author Agustín
  */
 public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
+    
     static MazoDeCartas mazo= new MazoDeCartas();
     static ListaParticipantes lista = new ListaParticipantes();
     static ListaParticipantes listaInicial = new ListaParticipantes();
@@ -26,12 +32,43 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     static ListaParticipantes listaFinal = new ListaParticipantes();
     static Scanner scan = new Scanner(System.in);
     static int turno;
-    static Cartas []baraja1 = new Cartas[5];
-    static Cartas []barajaR1 = new Cartas[5];
+    static boolean finRonda=false;
+
     static int contador = 0;
     static Participante Jugador;
-    static  Participante Rival;
+    static Participante Rival;
     
+    /**
+     * Creates new form InterfazPartidaDeadly21
+     */
+    public InterfazPartidaDeadly21() {
+        initComponents();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        Jugador = lista.obtenerParticipante(0);
+        Rival = lista.obtenerParejaParticipante(0); 
+        
+        Jugador.pedirCarta();
+        Rival.pedirCarta();
+        Jugador.pedirCarta();
+        Rival.pedirCarta();
+        
+        barridoCartas();
+        
+        turno = ThreadLocalRandom.current().nextInt(1,3);
+        barridoLuces();
+        
+        if (turno==2){
+            Rival.decision = Rival.decidirMaquina();
+            Rival.decidir();
+            barridoCartas();
+            
+            turno=1;
+            barridoLuces();
+        }
+        
+    }
+   
     public static void cargarParticipantes(){
         int numParticipantes=0;
         
@@ -44,83 +81,148 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
                 
                 numParticipantes++;
             }            
-            
-            lector.close();
-            
-            System.out.println("Ingrese su nombre");
-            lista.ingresarAlPrincipio(scan.nextLine(), null);
-            
-            
+            lector.close();  
         } catch (IOException e) { 
            
         }
     }
-   
-        
     
-    public void Partida(int i){
-        Jugador = lista.obtenerParticipante(i);
-        Rival = lista.obtenerParejaParticipante(i);
-        boolean finalRonda=false;
-           
-        while(Jugador.rondasGanadas<1 || Rival.rondasGanadas<1){
-           turno = ThreadLocalRandom.current().nextInt(1,3);
+    public void barridoCartas(){
+        JLabel aux = null;
         
-             baraja1[0] = Jugador.pedirCarta();
-            baraja1[1] = Jugador.pedirCarta();
-            Jugador.imprimirMano();
-            barajaR1[0] =Rival.pedirCarta();
-            barajaR1[1]=Rival.pedirCarta();
-            Rival.imprimirMano();
-            while(finalRonda==false){
-                if (turno==1 && Rival.decision!=1){
-                    turno=2;
-                }else if (turno==2 && Jugador.decision!=1){
-                    turno=1;
-                }
-
-                if (turno==1){
-                    if (Jugador.esBlackjack()==false){
-                       System.out.println("1.Quedarte 2.Pedir");
-                        Jugador.decision = scan.nextInt();
-                        Jugador.decidir(); 
-                    } 
-                    if (Jugador.esBlackjack()==true || Jugador.sePaso()==true){
-                        finalRonda=true;
-                    }
-                }else{
+        for (int i=0;i<=Jugador.tope;i++){
+            switch (i){
+                case 0:
+                    aux=cartaJugador1;
+                    break;
+                case 1:
+                    aux=cartaJugador2;
+                    break;
+                case 2:
+                    aux=cartaJugador3;
+                    break;
+                case 3:
+                    aux=cartaJugador4;
+                    break;
+                case 4:
+                    aux=cartaJugador5;
+                    break;
+            }
+            aux.setIcon(new javax.swing.ImageIcon(getClass().getResource(Jugador.mano[i].imagen)));
+        }
+        
+        for (int i=0;i<=Rival.tope;i++){
+            switch (i){
+                case 0:
+                    aux=cartaRival1;
+                    break;
+                case 1:
+                    aux=cartaRival2;
+                    break;
+                case 2:
+                    aux=cartaRival3;
+                    break;
+                case 3:
+                    aux=cartaRival4;
+                    break;
+                case 4:
+                    aux=cartaRival5;
+                    break;
+            }
+            aux.setIcon(new javax.swing.ImageIcon(getClass().getResource(Rival.mano[i].imagen)));
+        }
+    }
+    
+    public void barridoLuces(){
+        if (turno==1){
+            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png")));
+            linternaJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno2.png")));
+        }else if(turno==2){
+            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno2.png")));
+            linternaJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png")));
+        }
+    }
+    
+    public void Partida(int i,int decision){
+        turno=1;
+        barridoLuces();
+        if (Jugador.manoCharlie() || Rival.manoCharlie()){
+            finRonda=true;
+        }else if(Rival.sePaso() || Jugador.sePaso()){
+            finRonda=true;
+        }else if(decision==1 || Jugador.esBlackjack()){
+            botPedir.setEnabled(false);
+            botPlantar.setEnabled(false);
+            if (Rival.decision==1 || Rival.esBlackjack()){
+                finRonda=true;
+            }
+        }else if(decision==2){
+            if (Jugador.tope!=4){
+               Jugador.pedirCarta(); 
+            }
+            barridoCartas();
+        }
+        
+        if(Jugador.esBlackjack() || Jugador.sePaso()){
+            decision=1;
+        }
+        
+        if (finRonda==false && Rival.decision!=1){
+            turno=2;
+            barridoLuces();
+            
+            if (Jugador.manoCharlie() || Rival.manoCharlie()){
+                finRonda=true;
+            }else if(Rival.sePaso() || Jugador.sePaso()){
+                finRonda=true;
+            }else if(decision==1 || Jugador.esBlackjack()){
+                while (Rival.decision!=1 || Rival.manoCharlie() || !Rival.esBlackjack() || !Rival.sePaso()){
                     Rival.decision = Rival.decidirMaquina();
                     Rival.decidir();
-                    if (Rival.esBlackjack()==true || Rival.sePaso()==true){
-                        finalRonda=true;
-                    }
+                    barridoCartas();  
                 }
-                if (Jugador.decision==1 && Rival.decision==1){
-                    finalRonda=true;
-                }
-            }
+                finRonda=true;
+            }else{
+                Rival.decision = Rival.decidirMaquina();
+                Rival.decidir();
+                barridoCartas();
                 
-            finalRonda=false;
-            
-            if (Jugador.sumMano()==Rival.sumMano()){
+                if (Rival.decision==1 && decision==1){
+                    finRonda=true;
+                }
+                
+            }
+        }
+        turno=1;
+        barridoLuces();
+        if(Rival.esBlackjack() || Rival.sePaso()){
+            Rival.decision=1;
+        }
+        
+        if (finRonda==true){
+            if(Jugador.manoCharlie()){
                 Jugador.rondasGanadas++;
+                System.out.println("gANO POR MANO CHARLIE");
+            }else if(Rival.manoCharlie()){
                 Rival.rondasGanadas++;
-                System.out.println("Empate");
-            }else if (Jugador.sumMano()>Rival.sumMano() && !Jugador.sePaso() || Rival.sePaso() && !Jugador.sePaso()){
-                Jugador.rondasGanadas++;
-                System.out.println("Gano Jugador");
-            }else if (Jugador.sumMano()<Rival.sumMano() && !Rival.sePaso() || Jugador.sePaso() && !Rival.sePaso()){
-                Rival.rondasGanadas++;
-                System.out.println("Gano Rival");
+                System.out.println("gANO POR MANO CHARLIE");
+            }else if(decision==1 && Rival.decision==1){
+                if (Jugador.sumMano()==Rival.sumMano()){
+                    Jugador.rondasGanadas++;
+                    Rival.rondasGanadas++;
+                    System.out.println("EMPATEE");
+                }else if (Jugador.sumMano()>Rival.sumMano() && !Jugador.sePaso() || Rival.sePaso() && !Jugador.sePaso()){
+                    Jugador.rondasGanadas++;
+                    System.out.println("gANO JUGADOR");
+                }else if (Jugador.sumMano()<Rival.sumMano() && !Rival.sePaso() || Jugador.sePaso() && !Rival.sePaso()){
+                    Rival.rondasGanadas++;
+                    System.out.println("gANO RIVAL");
+                }
             }
             
             Jugador.reiniciarValores();
-            Rival.reiniciarValores();
+            Rival.reiniciarValores(); 
         }
-     
-        
-        
-        
     }
     
     
@@ -129,24 +231,6 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             lis.ingresarAlFinal(lista.competidor(i+1).nombre, lista.competidor(i+1).actitud);
         }
     }
-    /**
-     * Creates new form InterfazPartidaDeadly21
-     */
-    public InterfazPartidaDeadly21() {
-        initComponents();
-        setLocationRelativeTo(null);
-        try{
-        cartaJugador1.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[0].imagen)));
-        cartaJugador2.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[1].imagen)));
-        cartaRival1.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1[0].imagen)));
-        cartaRival2.setIcon(new javax.swing.ImageIcon(getClass().getResource(barajaR1[1].imagen)));
-        }
-        catch(Exception e){
-        }
-        
-    }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -173,6 +257,8 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         cartaRival3 = new javax.swing.JLabel();
         cartaRival4 = new javax.swing.JLabel();
         cartaRival5 = new javax.swing.JLabel();
+        linternaRival = new javax.swing.JLabel();
+        linternaJugador = new javax.swing.JLabel();
         fondoMesa = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -211,20 +297,23 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         fondoColor.add(botPedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 460, 258, 240));
 
         cartasMesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Cartas/back_black_basic_white.png"))); // NOI18N
-        fondoColor.add(cartasMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 120, 170));
+        fondoColor.add(cartasMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 260, 120, 170));
         fondoColor.add(cartaJugador5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 580, 120, 170));
         fondoColor.add(cartaJugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 580, 120, 170));
         fondoColor.add(cartaJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 580, 120, 170));
         fondoColor.add(cartaJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 580, 120, 170));
-
-        cartaJugador1.setBackground(new java.awt.Color(255, 255, 255));
-        cartaJugador1.setForeground(new java.awt.Color(255, 255, 255));
         fondoColor.add(cartaJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 580, 120, 170));
         fondoColor.add(cartaRival1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 120, 170));
         fondoColor.add(cartaRival2, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 10, 120, 170));
         fondoColor.add(cartaRival3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 120, 170));
         fondoColor.add(cartaRival4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 120, 170));
         fondoColor.add(cartaRival5, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 120, 170));
+
+        linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png"))); // NOI18N
+        fondoColor.add(linternaRival, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, -1, -1));
+
+        linternaJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png"))); // NOI18N
+        fondoColor.add(linternaJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, -1, -1));
 
         fondoMesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/FondoMesa.png"))); // NOI18N
         fondoMesa.setToolTipText("");
@@ -246,34 +335,44 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
 
     private void botPlantarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botPlantarActionPerformed
         // TODO add your handling code here:
-         
-        
+        Partida(0,1);
     }//GEN-LAST:event_botPlantarActionPerformed
 
     private void botPedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botPedirActionPerformed
         // TODO add your handling code here:
-        if(contador == 1){
-            baraja1[2] = Jugador.pedirCarta();
-            cartaJugador3.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[2].imagen)));
-        }
-        else if(contador == 2){
-            baraja1[3] = Jugador.pedirCarta();
-            cartaJugador4.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[3].imagen)));
-        }
-        
-        else if(contador == 3){
-            baraja1[4] = Jugador.pedirCarta();
-            cartaJugador5.setIcon(new javax.swing.ImageIcon(getClass().getResource(baraja1[4].imagen)));
-        }
-        else{
-            //error
-        }
-        contador++;
+        Partida(0,2);
     }//GEN-LAST:event_botPedirActionPerformed
+    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
 
-    /**
-     * @param args the command line arguments
-     */
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            new InterfazPartidaDeadly21().setVisible(true);
+        });
+        
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -292,11 +391,9 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     private javax.swing.JLabel cartasMesa;
     private javax.swing.JPanel fondoColor;
     private javax.swing.JLabel fondoMesa;
+    private javax.swing.JLabel linternaJugador;
+    private javax.swing.JLabel linternaRival;
     private javax.swing.JLabel uiJugador;
     private javax.swing.JLabel uiRival;
     // End of variables declaration//GEN-END:variables
-
-    private void establecerCarta(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
