@@ -227,7 +227,7 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
                 InterfazPartidaDeadly21.cargarParticipantes();
                 setVisible(false);
                 lista.ingresarAlPrincipio(aux, null);
-
+                
                 InterfazPartidaDeadly21.mazo.generarMazo();
                 InterfazPartidaDeadly21.mazo.barajearMazo();
                 InterfazPartidaDeadly21.lista.emparejar();

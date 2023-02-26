@@ -6,6 +6,11 @@
 package deadly21;
 
 
+import static deadly21.InterfazPartidaDeadly21.lista;
+import static deadly21.InterfazPartidaDeadly21.listaFinal;
+import static deadly21.InterfazPartidaDeadly21.listaInicial;
+import static deadly21.InterfazPartidaDeadly21.listaSemis;
+import static deadly21.InterfazPartidaDeadly21.ganador;
 import java.awt.Color;
 
 /**
@@ -13,7 +18,36 @@ import java.awt.Color;
  * @author Agustín
  */
 public class InterfazDuelos extends javax.swing.JFrame {
-
+    public void comienzo(){
+        jLabel1.setText(listaInicial.competidor(1).nombre);
+        jLabel13.setText(listaInicial.competidor(2).nombre);
+        jLabel14.setText(listaInicial.competidor(3).nombre);
+        jLabel15.setText(listaInicial.competidor(4).nombre);
+        jLabel7.setText(listaInicial.competidor(5).nombre);
+        jLabel8.setText(listaInicial.competidor(6).nombre);
+        jLabel9.setText(listaInicial.competidor(7).nombre);
+        jLabel10.setText(listaInicial.competidor(8).nombre);
+     }
+     
+    public void semis(){
+         comienzo();
+        jLabel2.setText(listaSemis.competidor(1).nombre);
+        jLabel16.setText(listaSemis.competidor(2).nombre);
+        jLabel5.setText(listaSemis.competidor(3).nombre);
+        jLabel6.setText(listaSemis.competidor(4).nombre);
+     }
+     
+     public void finals(){
+         semis();
+        jLabel12.setText(listaFinal.competidor(1).nombre);
+        jLabel4.setText(listaFinal.competidor(2).nombre);
+         
+     }
+     
+     public void ganador(){
+         finals();
+         jLabel3.setText(ganador.obtenerNombre());
+     }
     /**
      * Creates new form interfazDuelos
      */
@@ -21,6 +55,18 @@ public class InterfazDuelos extends javax.swing.JFrame {
         initComponents();
         setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
         setLocationRelativeTo(null);
+        if(lista.total() == 8){
+            comienzo();
+        }
+        else if(lista.total() == 4){
+            semis();
+        }
+         else if(lista.total() == 2){
+            finals();
+        }
+         else if(lista.total() == 1){
+             ganador();
+         }
     }
 
     /**
