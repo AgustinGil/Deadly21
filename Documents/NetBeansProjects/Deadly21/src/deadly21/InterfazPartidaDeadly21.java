@@ -251,7 +251,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     }
     
     public void continuar(int a){
-        System.out.println("a");
+        System.out.println(lista.obtenerNombreParticipante(a));
         lista.eliminar(a);
         if(lista.total() == 7){
             System.out.println("a");
@@ -266,11 +266,12 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         
        if(lista.total() == 1){
            ganador = lista.competidor(0);
-           lista.eliminarLista();
-           setVisible(false);
-           new InterfazMenuDeadly21().setVisible(true);
            InterfazDuelos interfazDuelos = new InterfazDuelos();
             interfazDuelos.setVisible(true);
+           lista.eliminarLista();
+           new InterfazMenuDeadly21().setVisible(true);
+           setVisible(false);
+            
        }
        
        else if(lista.competidor(0).actitud != null){
@@ -287,11 +288,14 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
                }
            }
            ganador = lista.competidor(0);
-           lista.eliminarLista();
-           setVisible(false);
-           new InterfazMenuDeadly21().setVisible(true);
+           
            InterfazDuelos interfazDuelos = new InterfazDuelos();
             interfazDuelos.setVisible(true);
+            lista.eliminarLista();
+             new InterfazMenuDeadly21().setVisible(true);
+           setVisible(false);
+           
+           
        }
        
          lista.emparejar();

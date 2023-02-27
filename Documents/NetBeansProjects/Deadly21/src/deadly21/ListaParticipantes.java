@@ -146,7 +146,7 @@ public class ListaParticipantes {
     }
     
     public void partidaSimulada(int i){
-        int eliminacion = ThreadLocalRandom.current().nextInt(1,3);
+        int eliminacion = (int) Math.round(Math.random());
         
         if (eliminacion==1){
             eliminar(i); 
