@@ -5,7 +5,12 @@
  */
 package deadly21;
 
-
+import static deadly21.InterfazPartidaDeadly21.lista;
+import static deadly21.InterfazPartidaDeadly21.listaFinal;
+import static deadly21.InterfazPartidaDeadly21.listaInicial;
+import static deadly21.InterfazPartidaDeadly21.listaSemis;
+import static deadly21.InterfazPartidaDeadly21.ganador;
+import static deadly21.InterfazMenuDeadly21.interfazPartida;
 import java.awt.Color;
 
 /**
@@ -13,7 +18,36 @@ import java.awt.Color;
  * @author Agustín
  */
 public class InterfazDuelos extends javax.swing.JFrame {
-
+    public void comienzo(){
+        jLabel1.setText(listaInicial.obtenerNombreParticipante(0));
+        jLabel13.setText(listaInicial.obtenerNombreParticipante(1));
+        jLabel14.setText(listaInicial.obtenerNombreParticipante(2));
+        jLabel15.setText(listaInicial.obtenerNombreParticipante(3));
+        jLabel7.setText(listaInicial.obtenerNombreParticipante(4));
+        jLabel8.setText(listaInicial.obtenerNombreParticipante(5));
+        jLabel9.setText(listaInicial.obtenerNombreParticipante(6));
+        jLabel10.setText(listaInicial.obtenerNombreParticipante(7));
+     }
+     
+    public void semis(){
+         comienzo();
+        jLabel2.setText(listaSemis.obtenerNombreParticipante(0));
+        jLabel16.setText(listaSemis.obtenerNombreParticipante(1));
+        jLabel5.setText(listaSemis.obtenerNombreParticipante(2));
+        jLabel6.setText(listaSemis.obtenerNombreParticipante(3));
+     }
+     
+     public void finals(){
+         semis();
+        jLabel12.setText(listaFinal.obtenerNombreParticipante(0));
+        jLabel4.setText(listaFinal.obtenerNombreParticipante(1));
+         
+     }
+     
+     public void ganador(){
+         finals();
+         jLabel3.setText(ganador.obtenerNombre());
+     }
     /**
      * Creates new form interfazDuelos
      */
@@ -21,6 +55,18 @@ public class InterfazDuelos extends javax.swing.JFrame {
         initComponents();
         setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
         setLocationRelativeTo(null);
+        if(lista.largo == 8){
+            comienzo();
+        }
+        else if(lista.largo == 4){
+            semis();
+        }
+         else if(lista.largo == 2){
+            finals();
+        }
+         else if(lista.largo == 1){
+             ganador();
+        }
     }
 
     /**
@@ -58,91 +104,76 @@ public class InterfazDuelos extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mariano");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 60, 20));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Mariano");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 424, 60, 20));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Mariano");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 560, 60, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Mariano");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 70, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Mariano");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 427, 60, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Mariano");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 510, 60, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Mariano");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 330, 60, 20));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Mariano");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 420, 60, 10));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Mariano");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 520, 60, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Mariano");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 600, 60, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Mariano");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(286, 470, 60, -1));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Mariano");
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 60, -1));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Mariano");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 510, 80, 30));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("Mariano");
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 600, 60, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Mariano");
         getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 60, -1));
 
         flechaCont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Flecha.png"))); // NOI18N

@@ -95,6 +95,15 @@ public class ListaParticipantes {
         return aux.obtenerPareja();
     }
     
+    public String obtenerActitudParticipante(int indice){
+        Participante aux = primero;
+        
+        for (int i=0; i<indice;i++){
+            aux = aux.obtenerSiguiente();
+        }
+        return aux.obtenerActitud();
+    }
+    
 
     //Metodo que permite insertar un nodo dado un indice
     public void insertarEnIndice(int indice,String nom, String act){
@@ -153,7 +162,7 @@ public class ListaParticipantes {
     
     public Participante competidor(int indice){
          Participante aux = primero;
-         for (int i=0; i< indice-1;i++){
+         for (int i=0; i< indice;i++){
                 aux = aux.obtenerSiguiente();
             }
          return aux;
@@ -172,5 +181,9 @@ public class ListaParticipantes {
                 aux = aux.obtenerSiguiente();
             }
         }
+    }
+    public void eliminarLista(){
+        primero.establecerSiguiente(null);
+        largo = 0;
     }
 }

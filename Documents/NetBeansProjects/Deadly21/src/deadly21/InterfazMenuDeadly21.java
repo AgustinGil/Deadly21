@@ -5,7 +5,9 @@
  */
 package deadly21;
 
+import static deadly21.InterfazPartidaDeadly21.igualar;
 import static deadly21.InterfazPartidaDeadly21.lista;
+import static deadly21.InterfazPartidaDeadly21.listaInicial;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,7 +33,7 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     static File fichero = new File("archivos");
     static String barra = File.separator;
     static String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
-    
+    static InterfazPartidaDeadly21 interfazPartida;
     
     
     public InterfazMenuDeadly21() {
@@ -230,20 +232,14 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
                 InterfazPartidaDeadly21.cargarParticipantes();
                 setVisible(false);
                 lista.ingresarAlPrincipio(aux, null);
-                
+                igualar(8,listaInicial);
                 InterfazPartidaDeadly21.mazo.generarMazo();
                 InterfazPartidaDeadly21.mazo.barajearMazo();
                 InterfazPartidaDeadly21.lista.emparejar();
                 
-                InterfazPartidaDeadly21 interfazPartida= new InterfazPartidaDeadly21();
+                interfazPartida= new InterfazPartidaDeadly21();
                 InterfazDuelos interfazDuelos= new InterfazDuelos();
                 interfazDuelos.setVisible(true);
-                
-                
-                for (int i=0; i<InterfazPartidaDeadly21.lista.largo;i++){
-                    System.out.println("\n " + "[" + i +"] " + InterfazPartidaDeadly21.lista.obtenerNombreParticipante(i) + " C, " + InterfazPartidaDeadly21.lista.obtenerParticipante(i).obtenerActitud() + InterfazPartidaDeadly21.lista.obtenerParejaParticipante(i).obtenerNombre());
-                }
-                
             }// NOMBRE INVALIDOS
         }//MENSAJE DE ERROR : TA VACIO
             
