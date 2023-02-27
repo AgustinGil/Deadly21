@@ -64,9 +64,12 @@ public class InterfazDuelos extends javax.swing.JFrame {
          else if(lista.largo == 2){
             finals();
         }
-         else if(lista.largo == 1 || lista.largo == 0){
+         else if(lista.largo == 1){
              ganador();
         }
+         else if(lista.largo == 0){
+             ganador();
+         }
     }
 
     /**

@@ -5,9 +5,13 @@
  */
 package deadly21;
 
+import static deadly21.InterfazPartidaDeadly21.ganador;
 import static deadly21.InterfazPartidaDeadly21.igualar;
 import static deadly21.InterfazPartidaDeadly21.lista;
+import static deadly21.InterfazPartidaDeadly21.listaFinal;
 import static deadly21.InterfazPartidaDeadly21.listaInicial;
+import static deadly21.InterfazPartidaDeadly21.listaSemis;
+import static deadly21.InterfazPartidaDeadly21.perdedores;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Formatter;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
@@ -29,20 +35,52 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     /**
      * Creates new form interfazDeadly21
      */
-    
     static File fichero = new File("archivos");
     static String barra = File.separator;
-    static String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
+    static String ubicacion = System.getProperty("user.dir") + barra + "archivos" + barra;
     static InterfazPartidaDeadly21 interfazPartida;
-    
-    
-    public InterfazMenuDeadly21() {
-        initComponents();
-        setLocationRelativeTo(null);
-        campoNombre.setBackground(new java.awt.Color(0,0,0,1));
-        campoNombre.setEditable(false);
+    static String archivoGanador = "Ganador.txt";
+    static String archivoPerdedores = "Perdedores.txt";
+    static File crearInfo = new File(ubicacion);
+    static File crearArchivoGanador = new File(ubicacion + archivoGanador);
+    static File crearArchivoPerdedores = new File(ubicacion + archivoPerdedores);
+
+    public static void crearPerdedores() {
+        crearInfo.mkdirs();
+        crearInfo.mkdirs();
+        try {//creando como se va a guardar los datos
+                FileWriter fichero = new FileWriter(ubicacion+archivoPerdedores);
+                 PrintWriter pw = new PrintWriter(fichero);
+
+            for(int i = 0; i < 7; i++){
+                pw.println("Nombre:  " + perdedores.obtenerNombreParticipante(i));}
+            fichero.close();
+    }   catch (Exception e) {
+            
+        }
+        
     }
     
+    public static void crearGanador(){
+        crearInfo.mkdirs();
+        try ( //creando como se va a guardar los datos
+                Formatter crearformato = new Formatter(ubicacion + archivoGanador)) {
+                crearformato.format("%s\r\n",
+                        "Nombre:    " + ganador.obtenerNombre());
+        } catch (Exception ex) {
+            
+        }
+    }
+
+    public InterfazMenuDeadly21() {
+        initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
+        campoNombre.setBackground(new java.awt.Color(0, 0, 0, 1));
+        campoNombre.setEditable(false);
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,7 +210,7 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
 
     private void botNuevaPartidaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botNuevaPartidaMouseEntered
         // TODO add your handling code here:
-       botNuevaPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/NuevaPartida2.png")));
+        botNuevaPartida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/NuevaPartida2.png")));
     }//GEN-LAST:event_botNuevaPartidaMouseEntered
 
     private void botNuevaPartidaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botNuevaPartidaMouseExited
@@ -215,10 +253,10 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
 
     private void campoNombreMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoNombreMouseExited
         // TODO add your handling code here:
-        if (cartel.getIcon()!=null){
-            String aux= campoNombre.getText();
-            if (aux.matches("[ ]*")){
-               campoNombre.setText("Ingrese su nombre"); 
+        if (cartel.getIcon() != null) {
+            String aux = campoNombre.getText();
+            if (aux.matches("[ ]*")) {
+                campoNombre.setText("Ingrese su nombre");
             }
         }
     }//GEN-LAST:event_campoNombreMouseExited
@@ -226,35 +264,35 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     private void flechaContActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flechaContActionPerformed
         // TODO add your handling code here:
         String aux = campoNombre.getText();
-        
-        if (!"Ingrese su nombre".equals(aux)){
-            if (aux.matches("[a-zA-Z]{1,10}")){
+
+        if (!"Ingrese su nombre".equals(aux)) {
+            if (aux.matches("[a-zA-Z]{1,10}")) {
                 InterfazPartidaDeadly21.cargarParticipantes();
                 setVisible(false);
                 lista.ingresarAlPrincipio(aux, null);
-                igualar(8,listaInicial);
+                igualar(8, listaInicial);
                 InterfazPartidaDeadly21.mazo.generarMazo();
                 InterfazPartidaDeadly21.mazo.barajearMazo();
                 InterfazPartidaDeadly21.lista.emparejar();
-                
-                interfazPartida= new InterfazPartidaDeadly21();
-                InterfazDuelos interfazDuelos= new InterfazDuelos();
+
+                interfazPartida = new InterfazPartidaDeadly21();
+                InterfazDuelos interfazDuelos = new InterfazDuelos();
                 interfazDuelos.setVisible(true);
             }// NOMBRE INVALIDOS
         }//MENSAJE DE ERROR : TA VACIO
-            
+
     }//GEN-LAST:event_flechaContActionPerformed
 
     private void flechaContMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flechaContMouseEntered
         // TODO add your handling code here:
-        if (cartel.getIcon()!=null){
+        if (cartel.getIcon() != null) {
             flechaCont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Flecha2.png")));
         }
     }//GEN-LAST:event_flechaContMouseEntered
 
     private void flechaContMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flechaContMouseExited
         // TODO add your handling code here:
-        if (cartel.getIcon()!=null){
+        if (cartel.getIcon() != null) {
             flechaCont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Flecha.png")));
         }
     }//GEN-LAST:event_flechaContMouseExited
@@ -290,7 +328,7 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new InterfazMenuDeadly21().setVisible(true);
         });
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,6 +5,8 @@
  */
 package deadly21;
 
+import static deadly21.InterfazMenuDeadly21.crearGanador;
+import static deadly21.InterfazMenuDeadly21.crearPerdedores;
 import static deadly21.InterfazMenuDeadly21.ubicacion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     
     static MazoDeCartas mazo= new MazoDeCartas();
     static ListaParticipantes lista = new ListaParticipantes();
+    static ListaParticipantes perdedores = new ListaParticipantes();
     static ListaParticipantes listaInicial = new ListaParticipantes();
     static ListaParticipantes listaSemis = new ListaParticipantes();
     static ListaParticipantes listaFinal = new ListaParticipantes();
@@ -42,6 +45,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     public static void mostrar(){
         if(lista.largo == 8){
             igualar(8, listaInicial);
+            igualar(8, perdedores);
         }else if (lista.largo == 4){
             igualar(4, listaSemis);
         }
@@ -198,7 +202,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     
     public static void igualar(int indice, ListaParticipantes lis){
         for(int i = 0; i<indice; i++){
-            lis.ingresarAlFinal(lista.obtenerNombreParticipante(i), lista.obtenerActitudParticipante(i));
+            lis.ingresarAlPrincipio(lista.obtenerNombreParticipante(indice-1-i), lista.obtenerActitudParticipante(indice-1-i));
         }
     }
     
@@ -266,6 +270,9 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         
        if(lista.total() == 1){
            ganador = lista.competidor(0);
+           perdedores.eliminarPorReferencia(ganador.obtenerNombre());
+           crearPerdedores();
+           crearGanador();
            InterfazDuelos interfazDuelos = new InterfazDuelos();
             interfazDuelos.setVisible(true);
            lista.eliminarLista();
@@ -274,7 +281,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             
        }
        
-       else if(lista.competidor(0).actitud != null){
+       else if(a == 0){
            while(lista.total() != 1){
                mostrar();
                if(lista.total() == 4 || lista.total() == 2){
@@ -287,8 +294,12 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
                 lista.partidaSimulada(1);
                }
            }
+           System.out.println("bbb");
            ganador = lista.competidor(0);
-           
+           perdedores.eliminarPorReferencia(ganador.obtenerNombre());
+           crearPerdedores();
+           crearGanador();
+           System.out.println("bbb");
            InterfazDuelos interfazDuelos = new InterfazDuelos();
             interfazDuelos.setVisible(true);
             lista.eliminarLista();

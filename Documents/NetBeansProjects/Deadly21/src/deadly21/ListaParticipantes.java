@@ -144,6 +144,53 @@ public class ListaParticipantes {
         }
         largo--;
     }
+     public boolean buscar(String referencia){
+        // Crea una copia de la lista.
+        Participante aux = primero;
+        // Bandera para indicar si el valor existe.
+        boolean encontrado = false;
+        // Recorre la lista hasta encontrar el elemento o hasta 
+        // llegar al final de la lista.
+        while(aux != null && encontrado != true){
+            // Consulta si el valor del nodo es igual al de referencia.
+            if (referencia == aux.obtenerNombre()){
+                // Canbia el valor de la bandera.
+                encontrado = true;
+            }
+            else{
+                // Avansa al siguiente. nodo.
+                aux = aux.obtenerSiguiente();
+            }
+        }
+        // Retorna el resultado de la bandera.
+        return encontrado;
+    }
+     
+    public void eliminarPorReferencia(String referencia){
+        // Consulta si el valor de referencia existe en la lista.
+        if (buscar(referencia)) {
+            // Consulta si el nodo a eliminar es el pirmero
+            if (primero.obtenerNombre() == referencia) {
+                // El primer nodo apunta al siguiente.
+                primero = primero.obtenerSiguiente();
+            } else{
+                // Crea ua copia de la lista.
+                 Participante aux = primero;
+                // Recorre la lista hasta llegar al nodo anterior 
+                // al de referencia.
+                while(aux.obtenerSiguiente().obtenerNombre() != referencia){
+                    aux = aux.obtenerSiguiente();
+                }
+                // Guarda el nodo siguiente del nodo a eliminar.
+                Participante siguiente = aux.obtenerSiguiente().obtenerSiguiente();
+                // Enlaza el nodo anterior al de eliminar con el 
+                // sguiente despues de el.
+                aux.establecerSiguiente(siguiente);  
+            }
+            // Disminuye el contador de tamaño de la lista.
+            largo--;
+        }
+    }
     
     public void partidaSimulada(int i){
         int eliminacion = (int) Math.round(Math.random());
