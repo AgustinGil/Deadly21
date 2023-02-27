@@ -5,18 +5,21 @@
  */
 package deadly21;
 
+import static deadly21.InterfazPartidaDeadly21.ganador;
+import static deadly21.InterfazPartidaDeadly21.igualar;
 import static deadly21.InterfazPartidaDeadly21.lista;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import static deadly21.InterfazPartidaDeadly21.listaFinal;
+import static deadly21.InterfazPartidaDeadly21.listaInicial;
+import static deadly21.InterfazPartidaDeadly21.listaSemis;
+import static deadly21.InterfazPartidaDeadly21.perdedores;
+import java.awt.Desktop;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -32,13 +35,56 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
     static String barra = File.separator;
     static String ubicacion = System.getProperty("user.dir")+barra+"archivos"+barra;
     static InterfazPartidaDeadly21 interfazPartida;
+    static String archivoGanador = "ganadores.out.txt";
+    static String archivoPerdedores = "perdedores.out.txt";
+    static File crearInfo = new File(ubicacion);
+    static File crearArchivoGanador = new File(ubicacion + archivoGanador);
+    static File crearArchivoPerdedores = new File(ubicacion + archivoPerdedores);
     
+    public static void crearPerdedores() {
+        crearInfo.mkdirs();
+        crearInfo.mkdirs();
+        try {//creando como se va a guardar los datos
+            FileWriter fichero = new FileWriter(ubicacion+archivoPerdedores);
+            PrintWriter pw = new PrintWriter(fichero);
+            
+            for(int i = 0; i < 7; i++){
+                pw.println("Nombre:  " + perdedores.obtenerNombreParticipante(i));
+            }
+            
+            fichero.close();
+        }catch (Exception e) {
+            System.out.println("Error con el manejo de archivo"); 
+        }
+        
+    }
+    
+    public static void crearGanador(){
+        crearInfo.mkdirs();
+        try {//creando como se va a guardar los datos
+            FileWriter fichero = new FileWriter(ubicacion+archivoGanador);
+            PrintWriter pw = new PrintWriter(fichero);
+
+            
+            pw.println("Nombre:  " + ganador.obtenerNombre());
+            if (ganador.obtenerActitud()!=null){
+              pw.println("Personalidad  " + ganador.obtenerActitud());  
+            }
+            pw.println("Sobrevivio todas las rondas, llegando hasta la final y ganando");
+            fichero.close();
+        }   catch (Exception e) {
+            System.out.println("Error con el manejo de archivo");   
+        }
+        
+    }
     
     public InterfazMenuDeadly21() {
         initComponents();
         setLocationRelativeTo(null);
         campoNombre.setBackground(new java.awt.Color(0,0,0,1));
         campoNombre.setEditable(false);
+        setTitle("Deadly21");
+        setResizable(false);
     }
     
     /**
@@ -102,9 +148,7 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
                 campoNombreActionPerformed(evt);
             }
         });
-        fondoColor.add(campoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 410, 520, 300));
-
-        cartel.setDisabledIcon(null);
+        fondoColor.add(campoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 340, 590, 420));
         fondoColor.add(cartel, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, -1, 500));
 
         TituloMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Titulo.png"))); // NOI18N
@@ -180,8 +224,13 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
 
     private void botComoJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botComoJugarActionPerformed
         // TODO add your handling code here:
-        InterfazDuelos interfazDue = new InterfazDuelos();
-        interfazDue.setVisible(true);
+        
+        File myFile = new File(ubicacion + "ComoJugar.pdf");
+        try {
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException ex) {
+            System.out.println("Error con el manejo de archivo");   
+        }
     }//GEN-LAST:event_botComoJugarActionPerformed
 
     private void botComoJugarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botComoJugarMouseEntered
@@ -230,7 +279,8 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
                 InterfazPartidaDeadly21.cargarParticipantes();
                 setVisible(false);
                 lista.ingresarAlPrincipio(aux, null);
-                
+                igualar(8,listaInicial);
+                igualar(8,perdedores);
                 InterfazPartidaDeadly21.mazo.generarMazo();
                 InterfazPartidaDeadly21.mazo.barajearMazo();
                 InterfazPartidaDeadly21.lista.emparejar();
@@ -239,9 +289,10 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
                 interfazPartida.setEnabled(false);
                 InterfazDuelos interfazDuelos= new InterfazDuelos();
                 interfazDuelos.setVisible(true);
-            }// NOMBRE INVALIDOS
-        }//MENSAJE DE ERROR : TA VACIO
-            
+            }else{
+                Avisos nuevoN = new Avisos(this,true,"El nombre ingresado no es valido","Menos de 10 caracteres, solo letras");
+            }
+        }Avisos nuevoN = new Avisos(this,true,"Ingrese un nombre",null);
     }//GEN-LAST:event_flechaContActionPerformed
 
     private void flechaContMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flechaContMouseEntered
@@ -262,28 +313,6 @@ public class InterfazMenuDeadly21 extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

@@ -19,34 +19,34 @@ import java.awt.Color;
  */
 public class InterfazDuelos extends javax.swing.JFrame {
     public void comienzo(){
-        jLabel1.setText(listaInicial.obtenerNombreParticipante(0));
-        jLabel13.setText(listaInicial.obtenerNombreParticipante(1));
-        jLabel14.setText(listaInicial.obtenerNombreParticipante(2));
-        jLabel15.setText(listaInicial.obtenerNombreParticipante(3));
-        jLabel7.setText(listaInicial.obtenerNombreParticipante(4));
-        jLabel8.setText(listaInicial.obtenerNombreParticipante(5));
-        jLabel9.setText(listaInicial.obtenerNombreParticipante(6));
-        jLabel10.setText(listaInicial.obtenerNombreParticipante(7));
+        labelOctavos1.setText(listaInicial.obtenerNombreParticipante(0));
+        labelOctavos5.setText(listaInicial.obtenerNombreParticipante(1));
+        labelOctavos6.setText(listaInicial.obtenerNombreParticipante(2));
+        labelOctavos7.setText(listaInicial.obtenerNombreParticipante(3));
+        labelOctavos.setText(listaInicial.obtenerNombreParticipante(4));
+        labelOctavos2.setText(listaInicial.obtenerNombreParticipante(5));
+        labelOctavos3.setText(listaInicial.obtenerNombreParticipante(6));
+        labelOctavos4.setText(listaInicial.obtenerNombreParticipante(7));
      }
      
     public void semis(){
          comienzo();
-        jLabel2.setText(listaSemis.obtenerNombreParticipante(0));
-        jLabel16.setText(listaSemis.obtenerNombreParticipante(1));
-        jLabel5.setText(listaSemis.obtenerNombreParticipante(2));
-        jLabel6.setText(listaSemis.obtenerNombreParticipante(3));
+        labelSemis.setText(listaSemis.obtenerNombreParticipante(0));
+        labelSemis1.setText(listaSemis.obtenerNombreParticipante(1));
+        labelSemis2.setText(listaSemis.obtenerNombreParticipante(2));
+        labelSemis3.setText(listaSemis.obtenerNombreParticipante(3));
      }
      
      public void finals(){
          semis();
-        jLabel12.setText(listaFinal.obtenerNombreParticipante(0));
-        jLabel4.setText(listaFinal.obtenerNombreParticipante(1));
+        labelFinal.setText(listaFinal.obtenerNombreParticipante(0));
+        labelFinal1.setText(listaFinal.obtenerNombreParticipante(1));
          
      }
      
      public void ganador(){
          finals();
-         jLabel3.setText(ganador.obtenerNombre());
+         labelGanador.setText(ganador.obtenerNombre());
      }
     /**
      * Creates new form interfazDuelos
@@ -64,7 +64,7 @@ public class InterfazDuelos extends javax.swing.JFrame {
          else if(lista.largo == 2){
             finals();
         }
-         else if(lista.largo == 1){
+         else if(lista.largo == 1 || lista.largo == 0){
              ganador();
         }
     }
@@ -78,21 +78,21 @@ public class InterfazDuelos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        labelOctavos = new javax.swing.JLabel();
+        labelOctavos1 = new javax.swing.JLabel();
+        labelOctavos2 = new javax.swing.JLabel();
+        labelOctavos3 = new javax.swing.JLabel();
+        labelOctavos4 = new javax.swing.JLabel();
+        labelOctavos5 = new javax.swing.JLabel();
+        labelOctavos6 = new javax.swing.JLabel();
+        labelOctavos7 = new javax.swing.JLabel();
+        labelSemis = new javax.swing.JLabel();
+        labelSemis1 = new javax.swing.JLabel();
+        labelSemis2 = new javax.swing.JLabel();
+        labelSemis3 = new javax.swing.JLabel();
+        labelFinal = new javax.swing.JLabel();
+        labelFinal1 = new javax.swing.JLabel();
+        labelGanador = new javax.swing.JLabel();
         flechaCont = new javax.swing.JButton();
         papelDuelos = new javax.swing.JLabel();
         cartelDuelos = new javax.swing.JLabel();
@@ -101,80 +101,80 @@ public class InterfazDuelos extends javax.swing.JFrame {
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 60, 20));
+        labelOctavos.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 330, 60, 20));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 424, 60, 20));
+        labelOctavos1.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos1.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 60, 20));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 560, 60, -1));
+        labelOctavos2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos2.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 420, 60, 10));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 70, -1));
+        labelOctavos3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos3.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 520, 60, -1));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 427, 60, -1));
+        labelOctavos4.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos4.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 600, 60, -1));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 510, 60, -1));
+        labelOctavos5.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos5.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 60, -1));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 330, 60, 20));
+        labelOctavos6.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos6.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 510, 80, 30));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 420, 60, 10));
+        labelOctavos7.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelOctavos7.setForeground(new java.awt.Color(0, 0, 0));
+        labelOctavos7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelOctavos7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 600, 60, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 520, 60, -1));
+        labelSemis.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelSemis.setForeground(new java.awt.Color(0, 0, 0));
+        labelSemis.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelSemis, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 424, 60, 20));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 600, 60, -1));
+        labelSemis1.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelSemis1.setForeground(new java.awt.Color(0, 0, 0));
+        labelSemis1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelSemis1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 60, -1));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(286, 470, 60, -1));
+        labelSemis2.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelSemis2.setForeground(new java.awt.Color(0, 0, 0));
+        labelSemis2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelSemis2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 427, 60, -1));
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, 60, -1));
+        labelSemis3.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelSemis3.setForeground(new java.awt.Color(0, 0, 0));
+        labelSemis3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelSemis3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 510, 60, -1));
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 510, 80, 30));
+        labelFinal.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelFinal.setForeground(new java.awt.Color(0, 0, 0));
+        labelFinal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelFinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(286, 470, 60, -1));
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 600, 60, -1));
+        labelFinal1.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelFinal1.setForeground(new java.awt.Color(0, 0, 0));
+        labelFinal1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelFinal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 70, -1));
 
-        jLabel16.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 510, 60, -1));
+        labelGanador.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        labelGanador.setForeground(new java.awt.Color(0, 0, 0));
+        labelGanador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(labelGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 560, 60, -1));
 
         flechaCont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/Flecha.png"))); // NOI18N
         flechaCont.setBorder(null);
@@ -220,9 +220,14 @@ public class InterfazDuelos extends javax.swing.JFrame {
 
     private void flechaContActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flechaContActionPerformed
         // TODO add your handling code here:
-       setVisible(false);
-       interfazPartida.setVisible(true);
-       interfazPartida.setEnabled(true);
+        setVisible(false);
+        if (ganador.obtenerNombre()!=""){
+            System.exit(0);
+        }else{
+            interfazPartida.setVisible(true);
+            interfazPartida.setEnabled(true);
+        }
+       
        
     }//GEN-LAST:event_flechaContActionPerformed
 
@@ -235,21 +240,21 @@ public class InterfazDuelos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel cartelDuelos;
     private javax.swing.JButton flechaCont;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel labelFinal;
+    private javax.swing.JLabel labelFinal1;
+    private javax.swing.JLabel labelGanador;
+    private javax.swing.JLabel labelOctavos;
+    private javax.swing.JLabel labelOctavos1;
+    private javax.swing.JLabel labelOctavos2;
+    private javax.swing.JLabel labelOctavos3;
+    private javax.swing.JLabel labelOctavos4;
+    private javax.swing.JLabel labelOctavos5;
+    private javax.swing.JLabel labelOctavos6;
+    private javax.swing.JLabel labelOctavos7;
+    private javax.swing.JLabel labelSemis;
+    private javax.swing.JLabel labelSemis1;
+    private javax.swing.JLabel labelSemis2;
+    private javax.swing.JLabel labelSemis3;
     private javax.swing.JLabel papelDuelos;
     // End of variables declaration//GEN-END:variables
 }

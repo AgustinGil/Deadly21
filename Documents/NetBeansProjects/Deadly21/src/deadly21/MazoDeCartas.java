@@ -42,6 +42,13 @@ public class MazoDeCartas {
         }
     }
     
+    public void vaciarMazo(){
+        for (int i=0; i<51;i++){
+            this.mazo[i]=null;
+            this.tope=-1;
+        }
+    }
+    
     public Cartas desapilar(){
         if(!this.estaVacio()){
             this.tope--;
@@ -55,6 +62,8 @@ public class MazoDeCartas {
     public void generarMazo(){
         String palo=" ";
         String valor=" ";
+        
+        this.vaciarMazo();
         
         for (int i=0; i<=3; i++){
             for (int j=1; j<14; j++){
@@ -129,14 +138,6 @@ public class MazoDeCartas {
             Cartas aux = this.mazo[indAux];
             this.mazo[indAux]=this.mazo[i];
             this.mazo[i]= aux;
-        } 
-        
-        System.out.println("El mazo se ha barajeado");
-    }
-    
-    public void imprimirMazo(){
-        for (int i=0; i<=51;i++) {
-            System.out.println("Pinta: " + this.mazo[i].obtenerPalo() + "  Valor: " +  this.mazo[i].obtenerValor());
         }
     }
 }

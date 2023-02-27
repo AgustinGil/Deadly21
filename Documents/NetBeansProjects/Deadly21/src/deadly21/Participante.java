@@ -113,19 +113,17 @@ public class Participante {
         return this.actitud;
     }
     
-    
-    
-    public int decidirMaquina(){
+    public int decidirMaquina(int sumContrario){
         switch (this.actitud){
             case "Reservado":
-                if (this.sumMano()<15){
+                if (this.sumMano()<15 && sumContrario<this.sumMano() || this.sumMano()<sumContrario){
                     this.decision=2;
                 }else{
                     this.decision=1;
                 }
                 break;
             case "Arriesgado":
-                if (this.sumMano()<18){
+                if (this.sumMano()<18 && sumContrario<this.sumMano() || this.sumMano()<sumContrario){
                     this.decision=2;
                 }else{
                     this.decision=1;
@@ -135,11 +133,7 @@ public class Participante {
         return this.decision;
     }
     
-    public void imprimirMano(){
-        for (int i=0; i<=tope;i++) {
-            System.out.println("Pinta: " + this.mano[i].obtenerPalo() + "  Valor: " +  this.mano[i].obtenerValor());
-        }
-    }
+
     
     public void reiniciarValores(){
         this.decision=0;

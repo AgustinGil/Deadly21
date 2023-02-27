@@ -5,6 +5,9 @@
  */
 package deadly21;
 
+import static deadly21.InterfazMenuDeadly21.crearGanador;
+import static deadly21.InterfazMenuDeadly21.crearPerdedores;
+import static deadly21.InterfazMenuDeadly21.interfazPartida;
 import static deadly21.InterfazMenuDeadly21.ubicacion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +30,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     
     static MazoDeCartas mazo= new MazoDeCartas();
     static ListaParticipantes lista = new ListaParticipantes();
+    static ListaParticipantes perdedores = new ListaParticipantes();
     static ListaParticipantes listaInicial = new ListaParticipantes();
     static ListaParticipantes listaSemis = new ListaParticipantes();
     static ListaParticipantes listaFinal = new ListaParticipantes();
@@ -34,7 +38,6 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     static Participante ganador = new Participante();
     static int turno;
     static boolean finRonda=false;
-    static int Rondas = 0;
     static int contador = 0;
     static Participante Jugador;
     static Participante Rival;
@@ -46,7 +49,8 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
-        mostrar();
+        setTitle("Deadly21");
+        setResizable(false);
         Jugador = lista.obtenerParticipante(0);
         Rival = lista.obtenerParejaParticipante(0); 
         
@@ -58,18 +62,19 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         barridoCartas();
         
         turno = ThreadLocalRandom.current().nextInt(1,3);
-        barridoLuces();
+ 
         
         nombreJugador.setText(Jugador.obtenerNombre());
         nombreRival.setText(Rival.obtenerNombre());
         if (turno==2){
             
-            Rival.decision = Rival.decidirMaquina();
+            Rival.decision = Rival.decidirMaquina(Jugador.sumMano());
             Rival.decidir();
             barridoCartas();
             
             turno=1;
             barridoLuces();
+            Avisos nuevo = new Avisos(this,true,"El rival ha empezado",null);
         }
         barridoSumas();
     }
@@ -82,7 +87,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             
             while (numParticipantes<7){
                 lista.ingresarAlPrincipio(lector.readLine(),lector.readLine());
-                System.out.println(lector.readLine());
+                lector.readLine();
                 
                 numParticipantes++;
             }            
@@ -152,12 +157,16 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     }
     
     public void barridoLuces(){
-        if (turno==1){
-            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png")));
+        if (Jugador.decision==1){
             linternaJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno2.png")));
-        }else if(turno==2){
-            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno2.png")));
+        }else{
             linternaJugador.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png")));
+        }
+        
+        if (Rival.decision==1){
+            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno2.png")));
+        }else{
+            linternaRival.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/BombilloTurno.png")));
         }
     }
     
@@ -189,7 +198,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     
     public static void igualar(int indice, ListaParticipantes lis){
         for(int i = 0; i<indice; i++){
-            lis.ingresarAlFinal(lista.obtenerNombreParticipante(i), lista.obtenerActitudParticipante(i));
+            lis.ingresarAlPrincipio(lista.obtenerNombreParticipante(indice-1-i), lista.obtenerActitudParticipante(indice-1-i));
         }
     }
     
@@ -198,57 +207,10 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             igualar(8, listaInicial);
         }else if (lista.largo == 4){
             igualar(4, listaSemis);
+            
         }
         else if (lista.largo == 2){
             igualar(2, listaFinal);
-        }
-    }
-    
-    public void finPartida(int i){
-        mostrar();
-        lista.eliminar(i);
-        
-        if (i==1 && lista.largo==7){
-            lista.partidaSimulada(1);
-            lista.partidaSimulada(2);
-            lista.partidaSimulada(3);
-        }else if(i==1 && lista.largo==3){
-            lista.partidaSimulada(1);
-        }else if(i==1 && lista.largo==1){
-            ganador=Jugador;
-        }else if (i==0 && lista.largo==7){
-            lista.partidaSimulada(1);
-            lista.partidaSimulada(2);
-            lista.partidaSimulada(3);
-            mostrar();
-            lista.partidaSimulada(0);
-            lista.partidaSimulada(1);
-            mostrar();
-            lista.partidaSimulada(0);
-            mostrar();
-            ganador=lista.obtenerParticipante(0);
-        }else if(i==0 && lista.largo==3){
-            lista.partidaSimulada(1);
-            lista.partidaSimulada(0);
-            mostrar();
-            ganador=lista.obtenerParticipante(0);
-        }else if(i==0 && lista.largo==1){
-            ganador=lista.obtenerParticipante(0);
-        }
-        
-        
-        new InterfazMenuDeadly21().setVisible(true);
-        InterfazDuelos interfazDuelos = new InterfazDuelos();
-        interfazDuelos.setVisible(true);
-        
-        if (i==1){
-            lista.emparejar();
-            Jugador.reiniciarValores();
-            Jugador.rondasGanadas=0;
-            mazo.generarMazo();
-            mazo.barajearMazo();
-        }else{
-            lista.emparejar();
         }
     }
     
@@ -256,44 +218,54 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         lista.eliminar(a);
         if(lista.largo == 7){
             lista.partidaSimulada(1);
+            lista.partidaSimulada(2);
             lista.partidaSimulada(3);
-            lista.partidaSimulada(5);
         }
-        else if(lista.largo == 5){
+        else if(lista.largo== 3){
             lista.partidaSimulada(1);
         }
         
-       if(lista.largo == 1){
-           ganador = lista.competidor(0);
-           setVisible(false);
-           new InterfazMenuDeadly21().setVisible(true);
-           InterfazDuelos interfazDuelos = new InterfazDuelos();
-            interfazDuelos.setVisible(true);
-            
-       }else if(lista.competidor(0).actitud != null){
-           while(lista.total() != 1){
-               if(lista.total() == 4 || lista.total() == 2){
-                   lista.emparejar();
-                   mostrar();
-               }
-               lista.partidaSimulada(0);
-               
-               if(lista.total() == 3){
-                lista.partidaSimulada(1);
-               }
-           }
-           ganador = lista.competidor(0);
-           setVisible(false);
-           new InterfazMenuDeadly21().setVisible(true);
-           InterfazDuelos interfazDuelos = new InterfazDuelos();
-            interfazDuelos.setVisible(true);
+        if(lista.largo == 1){
+            ganador = lista.obtenerParticipante(0);
+            perdedores.eliminarPorReferencia(ganador.obtenerNombre());
+            crearPerdedores();
+            crearGanador();
+            lista.eliminarLista();
+            setVisible(false);
        }
+       
+        else if(a == 0){
+            while(lista.largo != 1){
+                mostrar();
+                if(lista.largo == 4 || lista.largo == 2){
+                   lista.emparejar();
+                }
+                lista.partidaSimulada(0);
+                if(lista.largo == 3){
+                    lista.partidaSimulada(1);
+                }
+            }
+            ganador = lista.obtenerParticipante(0);
+            perdedores.eliminarPorReferencia(ganador.obtenerNombre());
+            crearPerdedores();
+            crearGanador();
+            lista.eliminarLista();
+             
+            setVisible(false);
+       }
+       
             lista.emparejar();
             mazo.generarMazo();
             mazo.barajearMazo();
+            nombreJugador.setText(Jugador.obtenerNombre());
+            Rival = lista.obtenerParejaParticipante(0);
+            
+            nombreRival.setText(Rival.obtenerNombre());
             Jugador.rondasGanadas = 0;
             Rival.rondasGanadas = 0;
-            Rondas = 0;
+            barridoRondas();
+            mensajes.setText("");
+            mensajes2.setText("");
             mostrar();
             InterfazDuelos interfazDuelos = new InterfazDuelos();
             interfazDuelos.setVisible(true);
@@ -301,103 +273,109 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     
     public void Partida(int i,int decision){
         barridoSumas();
-         mensajes.setText("");
-         mensajes2.setText("");
-        if (Jugador.manoCharlie() || Rival.manoCharlie()){
+        mensajes.setText("");
+        mensajes2.setText("");
+        Jugador.decision=decision;
+        barridoLuces();
+        if (Rival.sePaso()){
             finRonda=true;
-        }else if(Rival.sePaso() || Jugador.sePaso()){
-            finRonda=true;
-        }else if(decision==1 || Jugador.esBlackjack()){
-            botPedir.setEnabled(false);
-            botPlantar.setEnabled(false);
-            if (Rival.decision==1 || Rival.esBlackjack()){
-                finRonda=true;
-            }
-        }else if(decision==2){
+        }else if (decision==2){
             if (Jugador.tope!=4){
                Jugador.pedirCarta(); 
             }
             barridoCartas();
             barridoSumas();
+            
+            if (Jugador.manoCharlie() || Jugador.esBlackjack() || Jugador.sePaso()){
+                finRonda=true;
+                botPedir.setEnabled(false);
+                botPlantar.setEnabled(false);
+                decision=1;
+            }
+        }else if (decision==1){
+                botPedir.setEnabled(false);
+                botPlantar.setEnabled(false);
+                
+            if (Rival.decision==1 || Rival.esBlackjack()){
+                finRonda=true;
+            }
         }
         
-        if(Jugador.esBlackjack() || Jugador.sePaso()){
-            decision=1;
-        }
-        
+        Jugador.decision=decision;
+        barridoLuces();
         if (finRonda==false && Rival.decision!=1){
-            barridoLuces();
-            if (Jugador.manoCharlie() || Rival.manoCharlie()){
-                finRonda=true;
-            }else if(Rival.sePaso() || Jugador.sePaso()){
-                finRonda=true;
-            }else if(decision==1 || Jugador.esBlackjack()){
-                while (Rival.decision!=1){
-                    Rival.decidirMaquina();
-                    Rival.decidir();
-                    System.out.println(Rival.decision);
-                    barridoCartas();  
-                    barridoSumas();
-                    
+             Avisos nuevo = new Avisos(this,true,"Turno del rival",null);
+            if (decision==1){
+                while(Rival.decision!=1){
+                    Rival.decidirMaquina(Jugador.sumMano());
+                    Rival.decidir(); 
+
                     if (Rival.manoCharlie() || Rival.esBlackjack() || Rival.sePaso()){
                         Rival.decision=1;
                     }
-                    
-                }
-                finRonda=true;
-            }else{
-                Rival.decision = Rival.decidirMaquina();
-                Rival.decidir();
-                barridoCartas();
-                barridoSumas();
-                if (Rival.decision==1 && decision==1){
                     finRonda=true;
                 }
+            }else{
+                Rival.decision = Rival.decidirMaquina(Jugador.sumMano());
+                Rival.decidir();
                 
             }
         }
+        barridoCartas();  
         barridoSumas();
+        barridoLuces();
         
-        if (Jugador.manoCharlie() || Rival.manoCharlie()){
-            finRonda=true;
-            botPedir.setEnabled(false);
-            botPlantar.setEnabled(false);
-        }else if(Rival.sePaso() || Jugador.sePaso()){
-            finRonda=true;
-            botPedir.setEnabled(false);
-            botPlantar.setEnabled(false);
-            if(Rival.sePaso()){
-                mensajes2.setText("El rival se ha pasado de 21");
-            }else if(Jugador.sePaso()){
-                mensajes2.setText("Te has pasado de 21");
-            }
+        if (Jugador.sePaso()){
+            mensajes2.setText(Jugador.obtenerNombre() + " se ha pasado");
+        }else if (Rival.sePaso()){
+            mensajes2.setText(Rival.obtenerNombre() + " se ha pasado");
         }
         
-        if(Rival.esBlackjack() || Rival.sePaso()){
-            Rival.decision=1;
-        }
+        
         
         if (finRonda==true){
-            barridoSumas();
+            finRonda=false;
+            Jugador.decision=0;
+            Rival.decision=0;
+            
+            if (Jugador.rondasGanadas==2 && Rival.rondasGanadas==2){
+                Avisos finR = new Avisos(this,true,"Fin de la Ronda",null);
+            }else{
+                Avisos finR2 = new Avisos(this,true,"Fin de la Ronda","Inicia una nueva");
+            }
+            
             if(Jugador.manoCharlie()){
                 Jugador.rondasGanadas++;
-                mensajes.setText(Jugador.obtenerNombre() + "gano por mano de Charlie");
+                mensajes.setText(Jugador.obtenerNombre() + " gano por mano de Charlie");
             }else if(Rival.manoCharlie()){
                 Rival.rondasGanadas++;
-                mensajes.setText(Rival.obtenerNombre() + "gano por mano de Charlie");
+                mensajes.setText(Rival.obtenerNombre() + " gano por mano de Charlie");
             }else{
                 if (Jugador.sumMano()==Rival.sumMano()){
                     mensajes.setText("Ronda empatada");
                 }else if (Jugador.sumMano()>Rival.sumMano() && !Jugador.sePaso() || Rival.sePaso() && !Jugador.sePaso()){
                     Jugador.rondasGanadas++;
                     mensajes.setText("Gano esta ronda " + Jugador.obtenerNombre() );
+                    if(Jugador.sumMano()>Rival.sumMano() && !Jugador.sePaso()){
+                        mensajes2.setText("Ha tenido un numero mayor al rival \n\r Rival: " + Rival.sumMano() + "     Jugador: " + Jugador.sumMano());
+                    }
                 }else if (Jugador.sumMano()<Rival.sumMano() && !Rival.sePaso() || Jugador.sePaso() && !Rival.sePaso()){
                     Rival.rondasGanadas++;
                     mensajes.setText("Gano esta ronda " + Rival.obtenerNombre() );
+                    if(Jugador.sumMano()<Rival.sumMano() && !Rival.sePaso()){
+                        mensajes2.setText("El rival ha tenido un numero mayor \n\r Rival: " + Rival.sumMano() + "     Jugador: " + Jugador.sumMano());
+                    }
                 }
+                
+                
             }
             
             barridoRondas();
+            barridoCartas();
+            barridoSumas();
+            barridoLuces();
+            
+            
             
             Jugador.reiniciarValores();
             Rival.reiniciarValores(); 
@@ -406,25 +384,19 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
             barridoCartas();
             
             Jugador.pedirCarta(); 
-            barridoCartas();
-            Jugador.pedirCarta(); 
-            barridoCartas();
-            
             Rival.pedirCarta();
-            barridoCartas();
-            
+            Jugador.pedirCarta();
             Rival.pedirCarta();
             barridoCartas();
             barridoSumas();
-            /*
+            
+            
             if (Jugador.rondasGanadas==2){
-                System.out.println("Gano el jugador");
                 continuar(1);
             }else if(Rival.rondasGanadas==2){
-                System.out.println("Gano el rival");
                 continuar(0);
             }
-            */
+            
         }
     }
     
@@ -439,6 +411,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     private void initComponents() {
 
         fondoColor = new javax.swing.JPanel();
+        mensajes3 = new javax.swing.JLabel();
         mensajes2 = new javax.swing.JLabel();
         mensajes = new javax.swing.JLabel();
         sumManoJugador = new javax.swing.JLabel();
@@ -469,13 +442,18 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         fondoColor.setBackground(new java.awt.Color(153, 153, 153));
         fondoColor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        mensajes3.setFont(new java.awt.Font("Chiller", 1, 36)); // NOI18N
+        mensajes3.setForeground(new java.awt.Color(255, 255, 255));
+        mensajes3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        fondoColor.add(mensajes3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 1270, -1));
+
         mensajes2.setFont(new java.awt.Font("Chiller", 1, 36)); // NOI18N
-        mensajes2.setForeground(new java.awt.Color(153, 0, 0));
+        mensajes2.setForeground(new java.awt.Color(255, 255, 255));
         mensajes2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         fondoColor.add(mensajes2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 1270, -1));
 
         mensajes.setFont(new java.awt.Font("Chiller", 1, 48)); // NOI18N
-        mensajes.setForeground(new java.awt.Color(153, 0, 0));
+        mensajes.setForeground(new java.awt.Color(255, 255, 255));
         mensajes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         fondoColor.add(mensajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 1270, -1));
 
@@ -573,36 +551,6 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
         Partida(0,2);
     }//GEN-LAST:event_botPedirActionPerformed
     
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazMenuDeadly21.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new InterfazPartidaDeadly21().setVisible(true);
-        });
-        
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -625,6 +573,7 @@ public class InterfazPartidaDeadly21 extends javax.swing.JFrame {
     private javax.swing.JLabel linternaRival;
     private javax.swing.JLabel mensajes;
     private javax.swing.JLabel mensajes2;
+    private javax.swing.JLabel mensajes3;
     private javax.swing.JLabel nombreJugador;
     private javax.swing.JLabel nombreRival;
     private javax.swing.JLabel sumManoJugador;
